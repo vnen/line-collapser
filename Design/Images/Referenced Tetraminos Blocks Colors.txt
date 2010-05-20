@@ -1,0 +1,7 @@
+Black	.......	I
+Blue	.......	O
+Green	.......	L
+Navy	.......	J
+Red	.......	S
+Violet	.......	Z
+Yellow	.......	T

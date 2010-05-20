@@ -1,0 +1,72 @@
+///Last update: 2010/05/20 20:31 (UTC)
+
+***************************************************
+* For now, all the notes and comments are in      *
+* brazilian portuguese.                           *
+* I know english poorly, but I'll translate the   *
+* notes and comments ASAP                         *
+***************************************************
+
+***************************************************
+* Este arquivo contém a lista de bugs conhecidos, *
+* algumas alterações e inclusões para fazer antes *
+* de distribuir como completo. E, além disso, uma *
+* lista de adições ou modificações para depois da *
+* versão 1.0 (a ordem não é igual a especificada) *
+***************************************************
+
+***************************************************
+*                                                 *
+*                 Bugs & Glitches                 *
+*                                                 *
+***************************************************
+
+1) A rotação, às vezes, não funciona, ou é feita duas vezes (problema no handle event???)
+
+2) O 'pousar' do tetramino precisa de um certo delay, antes de lançar o próximo tetramino
+
+3) O 'pousar' não é feito em tempo constante: às vezes é mais rápido, às vezes mais devagar
+
+
+***************************************************
+*                                                 *
+*             Implementações a fazer              *
+*                                                 *
+***************************************************
+
+1) Tetraminos aleatórios (desativado por enquanto, pois facilita os testes)
+
+2) Controle de velocidade baseado em level (implementado, parece estar funcionando bem)
+
+3) Telas inicial e final
+
+4) Incluir som (mais difícil criar o som do que fazê-lo rodar)
+
+5) Criar um ícone
+
+6) Deixar a movimentação independente da frame rate (acho que isso resolve os glitches de tempo)
+
+7) Criar um game over com opção de jogar novamente
+
+8) Armazenar High Scores
+
+
+***************************************************
+*                                                 *
+*            Implementações adicionais            *
+*                                                 *
+***************************************************
+
+1) Função drop (não parece ser tão difícil, é só meter move_down até não poder mais, mas vou deixar pra depois)
+
+2) Na movimentação para a esquerda/direita, colocar um pequeno delay entre o primeiro movimento e os seguintes (assim como no Tetris original)
+
+3) Função hold (deixar isso pra depois MESMO)
+
+4) Melhorar a rotação pra deixar girar mesmo no canto da tela ou encostado da pilha (movimentando o tetramino adequadamente)
+
+5) Implementar a função dump
+
+6) Recriar com orientação a objetos (de verdade)
+
+7) Refazer a interface usando OpenGL
