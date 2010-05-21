@@ -4,7 +4,7 @@
 * For now, all the notes and comments are in      *
 * brazilian portuguese.                           *
 * I know english poorly, but I'll translate the   *
-* notes and comments ASAP                         *
+* notes and comments... sometime...               *
 ***************************************************
 
 ***************************************************
@@ -21,11 +21,11 @@
 *                                                 *
 ***************************************************
 
-1) A rotação, às vezes, não funciona, ou é feita duas vezes (problema no handle event???)
+- A rotação, às vezes, não funciona, ou é feita duas vezes (problema no handle event???)
 
-2) O 'pousar' do tetramino precisa de um certo delay, antes de lançar o próximo tetramino
+- O 'pousar' do tetramino precisa de um certo delay, antes de lançar o próximo tetramino (fixed 0.8.0.2)
 
-3) O 'pousar' não é feito em tempo constante: às vezes é mais rápido, às vezes mais devagar
+- O 'pousar' não é feito em tempo constante: às vezes é mais rápido, às vezes mais devagar (fixed 0.8.0.2)
 
 
 ***************************************************
@@ -34,21 +34,19 @@
 *                                                 *
 ***************************************************
 
-1) Tetraminos aleatórios (desativado por enquanto, pois facilita os testes)
+- Tetraminos aleatórios (desativado por enquanto, pois facilita os testes)
 
-2) Controle de velocidade baseado em level (implementado, parece estar funcionando bem)
+- Telas inicial e final
 
-3) Telas inicial e final
+- Incluir som (mais difícil criar o som do que fazê-lo rodar)
 
-4) Incluir som (mais difícil criar o som do que fazê-lo rodar)
+- Criar um ícone
 
-5) Criar um ícone
+- Deixar a movimentação independente da frame rate (acho que isso resolve os glitches de tempo)
 
-6) Deixar a movimentação independente da frame rate (acho que isso resolve os glitches de tempo)
+- Criar um game over com opção de jogar novamente
 
-7) Criar um game over com opção de jogar novamente
-
-8) Armazenar High Scores
+- Armazenar High Scores
 
 
 ***************************************************
@@ -57,16 +55,16 @@
 *                                                 *
 ***************************************************
 
-1) Função drop (não parece ser tão difícil, é só meter move_down até não poder mais, mas vou deixar pra depois)
+- Função drop (não parece ser tão difícil, é só meter move_down até não poder mais, mas vou deixar pra depois)
 
-2) Na movimentação para a esquerda/direita, colocar um pequeno delay entre o primeiro movimento e os seguintes (assim como no Tetris original)
+- Na movimentação para a esquerda/direita, colocar um pequeno delay entre o primeiro movimento e os seguintes (assim como no Tetris original)
 
-3) Função hold (deixar isso pra depois MESMO)
+- Função hold (deixar isso pra depois MESMO)
 
-4) Melhorar a rotação pra deixar girar mesmo no canto da tela ou encostado da pilha (movimentando o tetramino adequadamente)
+- Melhorar a rotação pra deixar girar mesmo no canto da tela ou encostado da pilha (movimentando o tetramino adequadamente)
 
-5) Implementar a função dump
+- Implementar a função dump
 
-6) Recriar com orientação a objetos (de verdade)
+- Recriar com orientação a objetos (de verdade)
 
-7) Refazer a interface usando OpenGL
+- Refazer a interface usando OpenGL

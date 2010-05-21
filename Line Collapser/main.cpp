@@ -59,6 +59,9 @@ int main (int argc, char* args[])
 	//Contagem para marcar o tempo da animação
 	int counting = 0;
 
+	//Contagem de tempo para a fixação do tetramino
+	Timer bottom;
+
 	//Backup das linhas para animação
 	BLOCK_COLOR backup[4][MATRIX_WIDTH];
 
@@ -194,6 +197,8 @@ int main (int argc, char* args[])
 				
 				//Se foi possível mover, incrementa a pontuação
 				if (scoring) score++;
+				//Se não é mais possível mover, cancela as próximas tentativas
+				else moving_down = false;
 
 			}//if cada 0.05 segundo && moving_down
 
@@ -202,97 +207,108 @@ int main (int argc, char* args[])
 			{
 				//Tenta mover para baixo e caso não consiga
 				if (!tetras[actual]->move_down())
-				{	
-					//Reseta o tetramino atual
-					tetras[actual]->reset();
-
-					//Checa por linhas completas
-					fullLines = check_lines();
-
-					//Se há linhas completas
-					if (fullLines[0] > 0)
-					{
-						//Inicia a retirada de linhas
-						collapsing = true;
-
-						//Verifica quantas linhas estão completas
-						//e aplica a pontuação correspondente
-						switch(fullLines[0])
-						{
-						case 1:
-							score += 100;
-							break;
-						case 2:
-							score += 200;
-							break;
-						case 3:
-							score += 400;
-							break;
-						case 4:
-							score += 800;
-							break;
-						default:
-							break;
-						}//switch (linhas completas)
-
-						//Atualiza o contador de linhas e o nível
-						line += fullLines[0];
-						level = 1 + floor((double)line / 10);
-						//O nível é, no máximo, 10
-						level = level < 10 ? level : 10;
-
-					} //if (tem linhas completas)
-					//Caso não haja
-					else
-						//Libera a memória que não será mais usada
-						free(fullLines);
-
-					//Caso esteja retirando as linhas
-					if (collapsing)
-					{
-						//Faz o backup das linhas que serão retiradas, para efeito de animação
-						//Percorre cada uma das colunas da matriz
-						for (int i = 0; i < MATRIX_WIDTH; i++)
-						{
-							//Pra cada linha que precisar ser retirada
-							for (int j = 0; j < fullLines[0]; j++)
-							{
-								//Copia para o backup a posição da matriz correspondente
-								backup[j][i] = game_matrix[fullLines[j+1]][i];
-
-								// fullLines começa em 1, pq fullLines[0] é a quantidade de linhas completas
-
-							}//for linhas completas
-						}//for colunas
-
-					}//if (collapsing)
-
-					//Caso não precise retirar linhas
-					else
-					{
-						//O tetramino próximo passa a ser o atual
-						actual = next;
-						//O próximo tetramino é gerado "aleatoriamente"
-						next = get_next();
-
-						//Tenta colocar o próximo tetramino na matriz
-						if (!tetras[actual]->put_in_matrix(true))
-						{
-							//Se não for possível, game over
-							//(não precisa fechar tão brusco assim)
-							quit = true;
-						}//if (não dá pra colocar a próxima na matriz)
-
-					}//if (não precisa retirar linhas)
-
-				}//if (não dá pra mover para baixo)
-			
+				{
+					//Inicia o contador, se ainda não estiver iniciado
+					if(!bottom.isStarted())
+						bottom.start();
+				}
 			}//if (está na hora de mover para baixo)
+			
+			//Se já tentou mover para baixo por tempo suficiente (750ms)
+			if (bottom.isStarted() && bottom.getTicks() > 750)
+			{	
+
+				//Para o contador
+				bottom.stop();
+
+				//Reseta o tetramino atual
+				tetras[actual]->reset();
+
+				//Checa por linhas completas
+				fullLines = check_lines();
+
+				//Se há linhas completas
+				if (fullLines[0] > 0)
+				{
+					//Inicia a retirada de linhas
+					collapsing = true;
+
+					//Verifica quantas linhas estão completas
+					//e aplica a pontuação correspondente
+					switch(fullLines[0])
+					{
+					case 1:
+						score += 100;
+						break;
+					case 2:
+						score += 200;
+						break;
+					case 3:
+						score += 400;
+						break;
+					case 4:
+						score += 800;
+						break;
+					default:
+						break;
+					}//switch (linhas completas)
+
+					//Atualiza o contador de linhas e o nível
+					line += fullLines[0];
+					level = 1 + floor((double)line / 10);
+					//O nível é, no máximo, 10
+					level = level < 10 ? level : 10;
+
+				} //if (tem linhas completas)
+				//Caso não haja
+				else
+					//Libera a memória que não será mais usada
+					free(fullLines);
+
+				//Caso esteja retirando as linhas
+				if (collapsing)
+				{
+					//Faz o backup das linhas que serão retiradas, para efeito de animação
+					//Percorre cada uma das colunas da matriz
+					for (int i = 0; i < MATRIX_WIDTH; i++)
+					{
+						//Pra cada linha que precisar ser retirada
+						for (int j = 0; j < fullLines[0]; j++)
+						{
+							//Copia para o backup a posição da matriz correspondente
+							backup[j][i] = game_matrix[fullLines[j+1]][i];
+
+							// fullLines começa em 1, pq fullLines[0] é a quantidade de linhas completas
+
+						}//for linhas completas
+					}//for colunas
+
+				}//if (collapsing)
+
+				//Caso não precise retirar linhas
+				else
+				{
+					//O tetramino próximo passa a ser o atual
+					actual = next;
+					//O próximo tetramino é gerado "aleatoriamente"
+					next = get_next();
+
+					//Tenta colocar o próximo tetramino na matriz
+					if (!tetras[actual]->put_in_matrix(true))
+					{
+						//Se não for possível, game over
+						//(não precisa fechar tão brusco assim)
+						quit = true;
+					}//if (não dá pra colocar a próxima na matriz)
+
+				}//if (não precisa retirar linhas)
+
+			}//if (não dá pra mover para baixo)
 
 		}// if(!collapsing)
 
 		//Caso esteja retirando linhas
-		else //if (collapsing)
+		if (collapsing)
 		{
 			{
 				//Incrementa a contagem
