@@ -4,15 +4,41 @@
 * For now, all the notes and comments are in      *
 * brazilian portuguese.                           *
 * I know english poorly, but I'll translate the   *
-* notes and comments... sometime...               *
+* notes and comments... I already started...      *
 ***************************************************
 
 ***************************************************
-* Este arquivo contém a lista de bugs conhecidos, *
-* algumas alterações e inclusões para fazer antes *
-* de distribuir como completo. E, além disso, uma *
-* lista de adições ou modificações para depois da *
-* versão 1.0 (a ordem não é igual a especificada) *
+*                                                 *
+*                  How to Play                    *
+*                                                 *
+***************************************************
+
+- Arrow keys: move tetriminos
+
+- Space bar: rotate tetriminos counter-clockwise
+
+***************************************************
+*                                                 *
+*                    Changes                      *
+*                                                 *
+***************************************************
+
+- 0.8.0.3
+
+	- added GNU/Linux support (fixed c++ errors)
+	- started to translate pt-br to en
+	
+- 0.8.0.2
+
+	- tetriminos now land in constant time (level-independent)
+
+
+***************************************************
+* This file contains the list of known bugs, some *
+* changes and addings to do before the final      *
+* release. And, besides, a list of addings and    *
+* changes to do after the version 1.0 (the order  *
+* is not like the specified)                      *
 ***************************************************
 
 ***************************************************
@@ -21,16 +47,16 @@
 *                                                 *
 ***************************************************
 
-- A rotação, às vezes, não funciona, ou é feita duas vezes (problema no handle event???)
+- Sometimes, rotation doesn't work or it's done twice (matbe a problem with event handler?)
 
-- O 'pousar' do tetramino precisa de um certo delay, antes de lançar o próximo tetramino (fixed 0.8.0.2)
+- The landing of tetriminos needs certain delay before to launch the next one (fixed 0.8.0.2)
 
-- O 'pousar' não é feito em tempo constante: às vezes é mais rápido, às vezes mais devagar (fixed 0.8.0.2)
+- The landing isn't done in constant time: sometimes is faster, somtimes is slower (fixed 0.8.0.2)
 
 
 ***************************************************
 *                                                 *
-*             Implementações a fazer              *
+*               Implementions to do               *
 *                                                 *
 ***************************************************
 
