@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "Timer.h"
 
 namespace line_collapser
@@ -44,16 +44,17 @@ void Timer::start()
 
 void Timer::togglePause()
 {
-	if (this->isStarted())		
+	if (this->isStarted())
+	{
 		//Se tiver iniciado e ...
 		if (!this->isPaused())
-			//... não estiver pausado
+			//... nXo estiver pausado
 			//armazena os ticks e pausa o timer
 		{
 			this->paused = true;
-			this->ticksOnPause = SDL_GetTicks() - this->ticksOnStart;	//Acho que uma variável apenas é suficiente para armazenar os ticks 
+			this->ticksOnPause = SDL_GetTicks() - this->ticksOnStart;	//Acho que uma variXvel apenas X suficiente para armazenar os ticks
 																		//Como elas trocam entre si, posso usar a mesma e ainda facilita
-																		//o código da pausa/continuação do timer
+																		//o cXdigo da pausa/continuaXXo do timer
 		}
 		else
 			//... estiver pausado
@@ -62,6 +63,7 @@ void Timer::togglePause()
 			this->paused = false;
 			this->ticksOnStart = SDL_GetTicks() - this->ticksOnPause;
 		}
+	}
 }
 
 void Timer::stop()
