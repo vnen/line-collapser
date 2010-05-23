@@ -1,29 +1,24 @@
 #ifndef _FALLING_INCLUDES_H_
 #define _FALLING_INCLUDES_H_
 
-//Bibliotecas-padrão
-#include <string>
-#include <cstdlib>
-#include <math.h>
 
-//Bibliotecas extras
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+#include <string>
 
 namespace line_collapser
 {
 
 //Screen Attributes
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-const int SCREEN_BPP = 32;
+#define SCREEN_WIDTH  640
+#define SCREEN_HEIGHT  480
+#define SCREEN_BPP  32
 
 //Frames per second
-const int GAME_FPS = 60;
+#define GAME_FPS  60
 
 //Colors
-const int COLORS_AMOUNT = 7;
+#define COLORS_AMOUNT  7
 enum BLOCK_COLOR 
 {
 	BLACK	,
@@ -37,87 +32,67 @@ enum BLOCK_COLOR
 };
 
 //Matrix for game area
-const int MATRIX_WIDTH = 10;
-const int MATRIX_HEIGHT = 20;
+#define MATRIX_WIDTH  10
+#define MATRIX_HEIGHT  20
 
-BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH] //[linha][coluna]
-=	{{NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-     {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-     {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
-	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE}};
+extern BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH];
 
 //Game Area Attributes
-const int BLOCK_SIZE = 20;
+#define BLOCK_SIZE  20
 	//caixa do jogo
-const int GAME_X = 267;
-const int GAME_Y = 40;
-const int GAME_WIDTH = MATRIX_WIDTH * BLOCK_SIZE;
-const int GAME_HEIGHT = MATRIX_HEIGHT * BLOCK_SIZE;
+#define GAME_X  267
+#define GAME_Y  40
+#define GAME_WIDTH  MATRIX_WIDTH * BLOCK_SIZE
+#define GAME_HEIGHT  MATRIX_HEIGHT * BLOCK_SIZE
 	//caixa do next
-const int NEXT_X = 76;
-const int NEXT_Y = 200;
-const int NEXT_WIDTH = 100;
-const int NEXT_HEIGHT = 100;
+#define NEXT_X  76
+#define NEXT_Y  200
+#define NEXT_WIDTH  100
+#define NEXT_HEIGHT  100
 	//caixa do score
-const int SCORE_X = 46;
-const int SCORE_Y = 40;
-const int SCORE_WIDTH = 160;
-const int SCORE_HEIGHT = 70;
+#define SCORE_X  46
+#define SCORE_Y  40
+#define SCORE_WIDTH  160
+#define SCORE_HEIGHT  70
 	//caixa da line
-const int LINE_X = 520;
-const int LINE_Y = 153;
-const int LINE_WIDTH = 70;
-const int LINE_HEIGHT = 50;
+#define LINE_X  520
+#define LINE_Y  153
+#define LINE_WIDTH  70
+#define LINE_HEIGHT  50
 	//caixa do level
-const int LEVEL_X = 520;
-const int LEVEL_Y = 223;
-const int LEVEL_WIDTH = 70;
-const int LEVEL_HEIGHT = 50;
+#define LEVEL_X  520
+#define LEVEL_Y  223
+#define LEVEL_WIDTH  70
+#define LEVEL_HEIGHT  50
 
 
 //Velocidade do bloco (em movimentos por segundo)
-int block_mps = 1;
+extern int block_mps;
 
 //Dados
-int score = 0;
-int level = 1;
-int line = 0;
+extern int score;
+extern int level;
+extern int line;
 
 //Screen
-SDL_Surface* screen = NULL;
+extern SDL_Surface* screen;
 
 //Images
-SDL_Surface* background = NULL;
+extern SDL_Surface* background;
 
 //Fonts
-TTF_Font* font = NULL;
+extern TTF_Font* font;
 
 //Texts
-SDL_Surface* Sscore = NULL;
-SDL_Surface* Sline = NULL;
-SDL_Surface* Slevel = NULL;
+extern SDL_Surface* Sscore;
+extern SDL_Surface* Sline;
+extern SDL_Surface* Slevel;
 
 //Sprites
-SDL_Surface* block_colors [COLORS_AMOUNT];
+extern SDL_Surface* block_colors [COLORS_AMOUNT];
 
 //Event
-SDL_Event eventQ;
+extern SDL_Event eventQ;
 
 
 
@@ -134,10 +109,10 @@ SDL_Event eventQ;
 //Inicializa o sistema
 int init();
 
-//Carrega os arquivos necessários
+//Carrega os arquivos necessrios
 bool load_files();
 
-//Libera a memória e encerra o sistema
+//Libera a memria e encerra o sistema
 void end_app();
 
 
@@ -161,13 +136,13 @@ void insert_block (int x, int y, BLOCK_COLOR color = NONE);
 //Insere um bloco na caixa next (com x,y relativo ao interior da caixa)
 void insert_next (int x, int y, BLOCK_COLOR color);
 
-//Desenha a pontuação
+//Desenha a pontuao
 void print_score (int scoreNum);
 
 //Desenha a quantidade de linhas
 void print_line (int lineNum);
 
-//Desenha o nível
+//Desenha o nvel
 void print_level (int levelNum);
 
 //Desenha a matriz
@@ -184,8 +159,8 @@ void collapse_line (int line);
 //{ qtd de linhas, linha 1, linha 2, linha 3, linha 4 }
 int* check_lines();
 
-//Gera um tetramino aleatório
-//(poderia usar direto a função 'random()', mas aqui posso usar um seed diferente sem comprometer o código)
+//Gera um tetramino aleatrio
+//(poderia usar direto a funo 'random()', mas aqui posso usar um seed diferente sem comprometer o cdigo)
 int get_next();
 
 

@@ -1,7 +1,72 @@
 #include "includes.h"
 
+//Bibliotecas-padro
+#include <string>
+#include <cstdlib>
+#include <math.h>
+
+//Bibliotecas extras
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+
 namespace line_collapser
 {
+
+											///**************************************///
+											///**************Variables***************///
+											///**************************************///
+
+BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH] //[linha][coluna]
+=	{{NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+     {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+     {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
+	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE}};
+
+//Velocidade do bloco (em movimentos por segundo)
+int block_mps = 1;
+
+//Dados
+int score = 0;
+int level = 1;
+int line = 0;
+
+//Screen
+SDL_Surface* screen = NULL;
+
+//Images
+SDL_Surface* background = NULL;
+
+//Fonts
+TTF_Font* font = NULL;
+
+//Texts
+SDL_Surface* Sscore = NULL;
+SDL_Surface* Sline = NULL;
+SDL_Surface* Slevel = NULL;
+
+//Sprites
+SDL_Surface* block_colors [COLORS_AMOUNT];
+
+//Event
+SDL_Event eventQ;
+
 
 
 										///**************************************///
@@ -16,8 +81,9 @@ int init()
 		{ return 1; }
 
 	//Inicializa o SDL_image e encerra se houver algum erro
+	/* It isn't working on Linux. On Windows, run fine without.
 	if ( !(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-		{ return 2; }
+		{ return 2; }*/
 
 	//Inicializa a SDL_ttf e encerra se houver algum erro
 	if (TTF_Init())
@@ -26,11 +92,11 @@ int init()
 	//Cria a janela
 	screen = SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
-	//Carrega os arquivos necessários e checa por erros
+	//Carrega os arquivos necessrios e checa por erros
 	if (!load_files())
 		{ return 5; }
 
-	//Alera o título 
+	//Alera o ttulo
 	SDL_WM_SetCaption ("Line Collapser", NULL);
 
 	//Se houve algum erro com a janela, encerrar
@@ -42,7 +108,7 @@ int init()
 
 }//init()
 
-//Carrega os arquivos necessários
+//Carrega os arquivos necessrios
 bool load_files()
 {
 	background = load_image ("images/background.png");
@@ -54,7 +120,7 @@ bool load_files()
 	for (int i = 0; i < COLORS_AMOUNT; i++)
 	{
 		char tmp[21];
-		sprintf_s(tmp, "images/block (%d).png", i+1);
+		sprintf(tmp, "images/block (%d).png", i+1);
 		block_colors[i] = load_image (tmp);
 		if (block_colors[i] == NULL)
 			{ return false; }
@@ -65,7 +131,7 @@ bool load_files()
 }//load_files()
 
 
-//Libera a memória e encerra o sistema
+//Libera a memria e encerra o sistema
 void end_app()
 {
 	//Fecha a fonte
@@ -81,7 +147,8 @@ void end_app()
 	SDL_FreeSurface (Sline);
 
 	//Encerra as bibliotecas
-	IMG_Quit ();
+	/* It isn't working on Linux. On Windows, run fine without.
+	IMG_Quit ();*/
 	TTF_Quit ();
 	SDL_Quit ();
 }
@@ -109,19 +176,19 @@ void insert_next (int x, int y, BLOCK_COLOR color)
 	}
 }//insert_next
 
-//Desenha a pontuação
+//Desenha a pontuao
 void print_score (int scoreNum)
 {
 	SDL_Color cor = {0,0,0};	//Cor RGB(0,0,0)
 	char scoreChar[50];			//Score em 'char'
 
-	sprintf_s(scoreChar, "%d", scoreNum);	//Converte o score para 'char'
+	sprintf(scoreChar, "%d", scoreNum);	//Converte o score para 'char'
 
 	//Armazena a surface para o score
 	SDL_FreeSurface (Sscore);
 	Sscore = TTF_RenderText_Solid (font, scoreChar, cor);
 
-	//Calcula a posição do score
+	//Calcula a posio do score
 	//(este deve ficar alinhado abaixo e a direita da caixa, com 5px de margem)
 	int x = SCORE_X + SCORE_WIDTH - Sscore->w - 7;
 	int y = SCORE_Y + SCORE_HEIGHT - Sscore->h - 5;
@@ -137,13 +204,13 @@ void print_line (int lineNum)
 	SDL_Color cor = {0,0,0};			//Cor RGB(0,0,0)
 	char lineChar[50];					//Line em 'char'
 
-	sprintf_s(lineChar, "%d", lineNum);	//Converte a line para 'char'
+	sprintf(lineChar, "%d", lineNum);	//Converte a line para 'char'
 
 	//Armazena a surface para a line
 	SDL_FreeSurface (Sline);
 	Sline = TTF_RenderText_Solid (font, lineChar, cor);
 
-	//Calcula a posição da line
+	//Calcula a posio da line
 	//(esta deve ficar centralizada na caixa, com 5px de margem para baixo)
 	int x = LINE_X + ((LINE_WIDTH - Sline->w) / 2);
 	int y = LINE_Y + LINE_HEIGHT - Sline->h - 5;
@@ -153,19 +220,19 @@ void print_line (int lineNum)
 }//print_line
 
 
-//Desenha o nível
+//Desenha o nvel
 void print_level (int levelNum)
 {
 	SDL_Color cor = {0,0,0};	//Cor RGB(0,0,0)
 	char levelChar[50];			//Level em 'char'
 
-	sprintf_s(levelChar, "%d", levelNum);	//Converte o level para 'char'
+	sprintf(levelChar, "%d", levelNum);	//Converte o level para 'char'
 
 	//Armazena a surface para a level
 	SDL_FreeSurface (Slevel);
 	Slevel = TTF_RenderText_Solid (font, levelChar, cor);
 
-	//Calcula a posição do level
+	//Calcula a posio do level
 	//(este deve ficar centralizado na caixa, com 5px de margem para baixo)
 	int x = LEVEL_X + ((LEVEL_WIDTH - Slevel->w) / 2);
 	int y = LEVEL_Y + LEVEL_HEIGHT - Slevel->h - 5;
@@ -242,10 +309,10 @@ void collapse_line (int line)
 	//Percorre a partir da linha para cima
 	for (int i = line; i >= 0; i--)
 	{
-		//Percorre cada célula dentro da linha
+		//Percorre cada clula dentro da linha
 		for (int j = 0; j < MATRIX_WIDTH; j++)
 		{
-			//Se for a linha mais alta (0) prenche com NONE, se não, apenas copia da linha de cima
+			//Se for a linha mais alta (0) prenche com NONE, se no, apenas copia da linha de cima
 			game_matrix[i][j] = (i == 0 ? NONE : game_matrix[i-1][j]);
 		}//for
 	}//for
@@ -259,7 +326,7 @@ void collapse_line (int line)
 //{ qtd de linhas, linha 1, linha 2, linha 3, linha 4 }
 int* check_lines()
 {
-	//Armazena as informações para retorno
+	//Armazena as informaes para retorno
 	int* tmp;
 	tmp = (int*) malloc( sizeof(int)*5 );
 	for (int i = 0; i < 5; i++)
@@ -273,7 +340,7 @@ int* check_lines()
 	//Percorre cada uma das linhas
 	for (int i = 0; i < MATRIX_HEIGHT; i++)
 	{
-		//Percorre cada célula dentro da linha
+		//Percorre cada clula dentro da linha
 		for (int j = 0; j < MATRIX_WIDTH; j++)
 		{
 			//Se estiver preenchido
@@ -282,13 +349,13 @@ int* check_lines()
 				//Acrescenta 1 aos filleds
 				filleds++;
 			}
-		}//for (células)
+		}//for (clulas)
 
-		//Se todas estão preenchidas (filleds == 10)
+		//Se todas esto preenchidas (filleds == 10)
 		if (filleds == MATRIX_WIDTH)
 		{
-			//Armazena no vetor de retorno, na posição seguinte
-			//Isto depende da quantidade de linhas que já foram preenchidas
+			//Armazena no vetor de retorno, na posio seguinte
+			//Isto depende da quantidade de linhas que j foram preenchidas
 			switch (tmp[0])
 			{
 			case 0:
@@ -299,8 +366,8 @@ int* check_lines()
 				tmp[tmp[0]] = i;
 				break;
 
-			//Se chegar no limite (4) já retorna para economizar CPU
-			//e evitar um acesso indevido à memória
+			//Se chegar no limite (4) j retorna para economizar CPU
+			//e evitar um acesso indevido  memria
 			case 4:
 				tmp[0] = tmp[0] + 1;
 				tmp[tmp[0]] = i;
@@ -320,7 +387,7 @@ int* check_lines()
 
 
 int nextsss = 0;
-//Gera um tetramino aleatório
+//Gera um tetramino aleatrio
 int get_next()
 {
 	//return SDL_GetTicks() % 7;
