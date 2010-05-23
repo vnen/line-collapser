@@ -5,7 +5,8 @@
 
 namespace line_collapser
 {
-	/* Esta classe nXo X instanciXvel, serve como base para
+	/* I know they're called Tetriminos, but it is not Tetris so I can call it the way I want to  =P
+	 * Esta classe nXo X instanciXvel, serve como base para
 	 * a criaXXo de Tetraminos individuais
 	 */
 

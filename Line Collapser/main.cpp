@@ -1,4 +1,3 @@
-
 #include "Timer.h"
 #include "Tetraminos.h"
 
@@ -9,20 +8,20 @@
 
 int main (int argc, char* args[])
 {
-	//Namespace padrao
+	//Standard namespace
 	using namespace line_collapser;
 	
-	//Funo de inicializao
-	//Se ocorreu algum erro encerra o programa
+	//Initialization function
+	//Exit the program if some error occurred
 	int errorlevel = init();
 	if (errorlevel != 0)
 	{
 		if(SDL_WasInit(SDL_INIT_EVERYTHING) != 0)
-		{ //Se o SDL foi inicializado, o encerra
+		{ //If the SDL was initialized, turn it off
 			SDL_Quit();
 
 			if(TTF_WasInit() == 1)
-			{ //Se o SDL_ttf foi inicializado, o encerra
+			{ //If the SDL_ttf was initialized, turn it off
 				TTF_Quit();
 			}
 		}
@@ -30,11 +29,11 @@ int main (int argc, char* args[])
 		return errorlevel;
 	}
 
-	//Timer para controlar a velocidade dos blocos (na verdade a frame rate)
+	//Timer to control the blocks speed (actually, it controls the frame rate)
 	Timer fpscap;
 	unsigned int frame = 0;
 
-	//Criao de tetraminos
+	//Tetraminos creation
 	Tetramino* tetras[7];
 	tetras[0] = new I();
 	tetras[1] = new O();
@@ -45,34 +44,35 @@ int main (int argc, char* args[])
 	tetras[6] = new T();
 	
 	/********************/
-	//***** Dados ******//
+	//****** Data ******//
 	/********************/
-	//Se  a primeira iterao
+	//If it is the first iteration
 	bool first = true;
 	
-	//Tetramino atual
+	//Actual Tetramino
 	int actual = 0;
 	
-	//Prximo Tetramino
+	//Next Tetramino
 	int next = 1;
 	
-	//Se est retirando linhas
+	//If it is collapsing lines
 	bool collapsing = false;
 	
-	//Contagem para marcar o tempo da animao
+	//Counting to make timing for animation
 	int counting = 0;
 
-	//Contagem de tempo para a fixao do tetramino
+	//Counting to wait the landing of Tetraminos
 	Timer bottom;
 
-	//Backup das linhas para animao
+	//A copyfor some lines to make the collapsing animation
 	BLOCK_COLOR backup[4][MATRIX_WIDTH];
 
-	//O 1 elemento  a quantidade de linhas completas
-	//Os outros so os ndices das linhas
-	int* fullLines;
+	//A pointer to an integer array
+	//The first element is the amount of lines
+	//The others are the lines indexes
+	int* fullLines = NULL;
 
-	//Indicadores para controle pelo jogador
+	//Flags of players controlling
 	bool moving_down = false;
 	bool moving_left = false;
 	bool moving_right = false;
@@ -80,164 +80,177 @@ int main (int argc, char* args[])
 
 
 
-	//Loop principal
+	//Main loop
 	bool quit = false;
 	while (!quit)
 	{
 		fpscap.start();
 		frame++;
 
-		//Trata todos os eventos gerados
+		//Handle all the generated events
 		while (SDL_PollEvent (&eventQ))
 		{
-			//Captura o tipo de evento
+			//Captures the type of event
 			switch (eventQ.type)
 			{
-			//Se o usurio tentar fechar a janela
+			//If the user try to close the window
 			case SDL_QUIT:
-				//Marca a flag para encerramento do loop
+				//Sets the flag to quit the main loop
 				quit = true;
 				break;
-			//Se o usurio pressionou alguma tecla
+			//If the user has pressed a key
 			case SDL_KEYDOWN:
-				if(    (eventQ.key.keysym.sym == SDLK_F4)		//Se foi pressionado F4
-				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//e estava com Alt esquerda pressionada
-				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//e no estava com Ctrl pressionada
-				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//e no estava com Shift pressionada
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
 				{
-					quit = true;								//Marca a flag para encerramento do loop
+					quit = true;								//Sets the flag to quit the main loop
 				}
-				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//Se foi pressionado Esc
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
 				{
-					quit = true;								//Marca a flag para encerramento do loop
+					quit = true;								//Sets the flag to quit the main loop
 				}
 
-				//Se foi pressionado para a esquerda, habilitar a flag
+				//If the left arrow key was pressed, set the flag
 				if(eventQ.key.keysym.sym == SDLK_LEFT)
 				{
 					moving_left = true;
 				}
-				//Se foi pressionado para a direita, habilitar a flag
+				//If the right arrow key was pressed, set the flag
 				if(eventQ.key.keysym.sym == SDLK_RIGHT)
 				{
 					moving_right = true;
 				}
-				//Se foi pressionado para baixo, habilitar a flag
+				//If the down arrow key was pressed, set the flag
 				if(eventQ.key.keysym.sym == SDLK_DOWN)
 				{
 					moving_down = true;
 				}
 
-				//Se foi pressionado espao, rotaciona (sentido anti-horrio)
+				//If the space bar was pressed, rotate (counter-clockwise)
 				if (eventQ.key.keysym.sym == SDLK_SPACE)
 				{
 					tetras[actual]->rotate();
 				}
 				break;
 
-			//Se o usurio deixou de prssionar alguma tecla
+			//If the user is no longer pressing a key
 			case SDL_KEYUP:
-				//Se deixou de pressionar para a esquerda, desabilitar a flag
+				//If the left arrow key was unpressed, unset the flag
 				if(eventQ.key.keysym.sym == SDLK_LEFT)
 				{
 					moving_left = false;
 				}
-				//Se deixou de pressionar para a direita, desabilitar a flag
+				//If the right arrow key was unpressed, unset the flag
 				if(eventQ.key.keysym.sym == SDLK_RIGHT)
 				{
 					moving_right = false;
 				}
-				//Se deixou de pressionar para baixo, desabilitar a flag
+				//If the down arrow key was unpressed, unset the flag
 				if(eventQ.key.keysym.sym == SDLK_DOWN)
 				{
 					moving_down = false;
 				}
 			default:
 				break;
-			}//switch de eventos
-		}//while de eventos
+			}//events switch
+		}//events while
 
 
 
-		//Controle dos movimentos e lgica
+		//Movement controls and logics
 
 
 
-		//Se for a primeira iterao
+		//If it is the first interaction
+		/* NOTE:
+		 * Maybe this could stand before the main loop
+		 * but it'll remain this way for now
+		 * I'll change when I put the start screen */
 		if (first)
 		{
-			//Tenta colocar o primeiro tetramino na matriz
-			//Se no for possvel, h algo de errado e encerra o programa
+			//Try to put the first Tetramino in the matrix
+			//If it isn't possible, something is wrong so quit teh main loop
 			if (!tetras[actual]->put_in_matrix(true))
 				quit = true;
-			//A partir de agora, no ser mais a primeira iterao
+			//From now on, it won't be the first iteration
 			first = false;
 
-			//No  necessrio fazer mais nada, j que acabamos de colocar o tetramino
-			//A lgica s ser testada na prxima iterao
+			//So we don't need to do nothing more, because we just put the first tetramino
+			//All the logic will start in the next iteration
+			//(hey it is just the single first frame)
 
 		}//if (first)
 
-		//Caso no seja a primeira iterao e no esteja retirando linhas
+		//If it isn't the first iteration, and it isn't collapsing lines
 		else if (!collapsing)
 		{
-			//A cada 0.1 segundo
+			//Every 0.1 second
 			if (frame % (GAME_FPS/10) == 0)
 			{
-				//Se est pressionado para a esquerda, efetua o movimento
+				//If the user is pressing the left arrow, move to left
 				if (moving_left)
 					tetras[actual]->move_left();
-				//Se est pressionado para a direita, efetua o movimento
+				//If the user is pressing the right arrow, move to right
 				if(moving_right)
 					tetras[actual]->move_right();
-			}// if (cada 0.1 segundo)
 
-			//A cada 0.05 segundo e se est pressionando para baixo
+			}// if (every 0.1 second)
+
+			//Every 0.05 second and if the user is pressing the down arrow
 			if ((moving_down && (frame % (GAME_FPS/20)) == 0))
 			{
-				//Efetua o movimento para baixo
+				//Move down the Tetramino and check if it is possible
 				bool scoring = tetras[actual]->move_down();
 				
-				//Se foi possvel mover, incrementa a pontuao
+				//If it was possible to move, increase the score
 				if (scoring) score++;
-				//Se no  mais possvel mover, cancela as prximas tentativas
-				else moving_down = false;
+				//If it can't move anymore, cancel the next tries
+				//else moving_down = false; //I think I don't need this
 
-			}//if cada 0.05 segundo && moving_down
+			}//if (every 0.05 second && moving_down)
 
-			//Caso contrrio e estiver no tempo adequado ao nvel
+			//Else, and if it is in time based on level
 			else if ( (((frame % ((11 - level)*4)) == 0)))
 			{
-				//Tenta mover para baixo e caso no consiga
+				//Try to move down, and if it can't
 				if (!tetras[actual]->move_down())
 				{
-					//Inicia o contador, se ainda no estiver iniciado
+					//Start the timer, if it isn't already started
 					if(!bottom.isStarted())
 						bottom.start();
+				} //if (can't move down)
+				//If it moved down (this 'else' statement fix the flying tetraminos bug. At least I think so)
+				else
+				{
+					//Stops the timer
+					bottom.stop();
 				}
-			}//if (est na hora de mover para baixo)
+			}//if (it's time to move down)
 			
-			//Se j tentou mover para baixo por tempo suficiente (750ms)
+			//If it tried to move down for time enough (750ms)
 			if (bottom.isStarted() && bottom.getTicks() > 750)
-			{	
+			{
 
-				//Para o contador
+				//Stops the timer
 				bottom.stop();
 
-				//Reseta o tetramino atual
+				//Resets the actual tetramino
 				tetras[actual]->reset();
 
-				//Checa por linhas completas
+				//Checks for full lines
 				fullLines = check_lines();
 
-				//Se h linhas completas
+				//If there is full lines
 				if (fullLines[0] > 0)
 				{
-					//Inicia a retirada de linhas
+					//Start the collapsing
 					collapsing = true;
 
-					//Verifica quantas linhas esto completas
-					//e aplica a pontuao correspondente
+					//Check how many lines are full
+					//and applies the correspondent score
 					switch(fullLines[0])
 					{
 					case 1:
@@ -254,171 +267,175 @@ int main (int argc, char* args[])
 						break;
 					default:
 						break;
-					}//switch (linhas completas)
+					}//switch (full lines)
 
-					//Atualiza o contador de linhas e o nvel
+					//Updates the line counter and the level
 					line += fullLines[0];
 					level = (int)1 + floor((double)line / 10);
-					//O nvel , no mximo, 10
+					//The level can be, at most, 10
 					level = level < 10 ? level : 10;
 
-				} //if (tem linhas completas)
-				//Caso no haja
+				} //if (have full lines)
+				//If there isn't
 				else
-					//Libera a memria que no ser mais usada
+					//Free the memory which will no longer be used
 					free(fullLines);
 
-				//Caso esteja retirando as linhas
+				//If it is collapsing lines
 				if (collapsing)
 				{
-					//Faz o backup das linhas que sero retiradas, para efeito de animao
-					//Percorre cada uma das colunas da matriz
+					//Make a copy of the lines that are collapsing, just to make the animation
+					//Goes through each column of the matrix
 					for (int i = 0; i < MATRIX_WIDTH; i++)
 					{
-						//Pra cada linha que precisar ser retirada
+						//For each line that needs to be removed
 						for (int j = 0; j < fullLines[0]; j++)
 						{
-							//Copia para o backup a posio da matriz correspondente
+							//Copy to the backup, in the correspondent position
 							backup[j][i] = game_matrix[fullLines[j+1]][i];
 
-							// fullLines comea em 1, pq fullLines[0]  a quantidade de linhas completas
+							// fullLines starts in 1, because fullLines[0] is the amount of lines
 
-						}//for linhas completas
-					}//for colunas
+						}//for (fullLines)
+					}//for (columns)
 
 				}//if (collapsing)
 
-				//Caso no precise retirar linhas
+				//If there's no needing to collapse lines
 				else
 				{
-					//O tetramino prximo passa a ser o atual
+					//The next Tetramino now is the actual
 					actual = next;
-					//O prximo tetramino  gerado "aleatoriamente"
+					//The next Tetramino is generated "randomly" (It isn't randomly to make tests easier)
 					next = get_next();
 
-					//Tenta colocar o prximo tetramino na matriz
+					//Try to put the next Tetramino on the matrix
 					if (!tetras[actual]->put_in_matrix(true))
 					{
-						//Se no for possvel, game over
-						//(no precisa fechar to brusco assim)
+						//If it isn't possible, game over
+						//(here is the place to make an game over screen)
 						quit = true;
-					}//if (no d pra colocar a prxima na matriz)
+					}//if (it couldn't put the next one on the matrix)
 
-				}//if (no precisa retirar linhas)
+				}//if (there's no needing to collapse lines)
 
-			}//if (no d pra mover para baixo)
+			}//if (it can't move down)
 
 		}// if(!collapsing)
 
-		//Caso esteja retirando linhas
+		//If it is collapsing lines
 		if (collapsing)
 		{
 			{
-				//Incrementa a contagem
+				//Increment the animation counter
 				counting++;
 
-				//Animao
-					/* A contagem indica em que passo estamos da animao
-					 * A cada 6 passos alterna-se entre mostrar e apagar a linha
-					 * Para mostrar a linha usamos o backup feito anteriormente 
-					 * A ltima etapa  com a linha apagada
+				//Animation
+					/* The counting indicates in what step of the animation we are
+					 * Every 6 (GAME_FPS/10) steps it alternates between show and hide the lines
+					 * To show the lines we use the previous made backup
+					 * In the last step the line is hidden
 					 */
 
-					if (counting <= 6 || (counting > 12 && counting <= 18) || (counting > 24 && counting <= 30) ||
-						(counting > 36 && counting <= 42) || (counting > 48 && counting <= 54))
-					//Apaga
-					//Esta funo  quase idntica ao backup, a diferena  que apaga da matriz, ao invs de copiar
+					if (counting <= (GAME_FPS/10) || (counting > (2*GAME_FPS/10) && counting <= (3*GAME_FPS/10)) ||
+							(counting > (4*GAME_FPS/10) && counting <= (5*GAME_FPS/10)) ||
+							(counting > (6*GAME_FPS/10) && counting <= (7*GAME_FPS/10)) ||
+							(counting > (8*GAME_FPS/10) && counting <= (9*GAME_FPS/10)))
+					//Hides
+					//This function is almost identical to the backuo function, but it erases instead copy
 					for (int i = 0; i < MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)
 						{
 							game_matrix[fullLines[j+1]][i] = NONE;
-						}//for (cada coluna)
-					}//for (cada linha completa)
+						}//for (each fullLine)
+					}//for (each column)
 
-					/* Acho importante comentar que os valores do 'if' de mostrar e de apagar so iguais
-					 * O que altera so os operadores de comparao
+					/* I think it's important to notice that the values in both if statements are the same
+					 * What changes is the comparison operator
 					 */
-					if ((counting > 6 && counting <= 12) || (counting > 18 && counting <= 24) ||
-						(counting > 30 && counting <= 36) || (counting > 42 && counting <= 48))
-					//Desfaz o apagar
-					//Esta funo  quase idntica ao backup, a diferena  que copia do backup para a matriz, ao invs do contrrio
+					if ((counting > (GAME_FPS/10) && counting <= (2*GAME_FPS/10)) ||
+							(counting > (3*GAME_FPS/10) && counting <= (4*GAME_FPS/10)) ||
+							(counting > (5*GAME_FPS/10) && counting <= (6*GAME_FPS/10)) ||
+							(counting > (7*GAME_FPS/10) && counting <= (8*GAME_FPS/10)))
+					//Shows
+					//This function is almost identical to the backup function, but it copies from backup to matrix, instead the opposite
 					for (int i = 0; i < MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)
 						{
 							game_matrix[fullLines[j+1]][i] = backup[j][i];
-						}//for (cada coluna)
-					}//for (cada linha completa)
+						}//for (each fullLine)
+					}//for (each column)
 
 
-				//Se a contagem passou do ltimo passo
-				if (counting > 54)
+				//If the counting is beyond the last step
+				if (counting > (9*GAME_FPS/10))
 				{
-					//Para cada linha completa
+					//For each fullLine
 					for (int i = 0; i < fullLines[0]; i++)
 					{
-						//Retira a linha
+						//Collapse the line
 						collapse_line(fullLines[i+1]);
-					}//for (cada linha completa)
+					}//for (each fullLine)
 
-					//No est mais retirando a linha
+					//We're not collapsing lines anymore
 					collapsing = false;
 
-					//O prximo tetramino passa a ser o atual
+					//The next Tetramino now is the actual
 					actual = next;
 
-					//O prximo tetramino  gerado "aleatoriamente"
+					//The next Tetramino is generated "randomly"
 					next = get_next();
 
-					//Se no for possvel colocar na matriz, game over
-					//(no precisa fechar to brusco assim)
+					//If it isn't possible, game over
+					//(here is the place to make an game over screen)
 					if (!tetras[actual]->put_in_matrix(true))
 					{
 						quit = true;
 					}
-					//Libera a memria que no ser mais utilizada
+					//Free the memory which will no longer be used
 					free(fullLines);
 
-					//Zera a contagem de passos da animao
+					//Resets the animation steps counting
 					counting = 0;
 				}
 			}
 		}
 							
 
-		//Renderizao
-		//Aplica a imagem de fundo
+		//Renderization
+		//Applies the background
 		apply_surface(0, 0, background, screen);
 
-		//Desenha o prximo Tetramino
+		//Draws the next tetramino
 		tetras[next]->draw_in_next();
 
-		//Escreve a pontuao
+		//Writes the score
 		print_score (score);
 
-		//Escreve a quantidade de  linhas
+		//Writes the amount of lines collapsed
 		print_line (line);
 
-		//Escreve o nvel atual
+		//Writes the actual level
 		print_level (level);
 
-		//Desenha a matriz
+		//Writes the matrix
 		paint_matrix();
 
-		//Atualiza a tela e checa por erros
+		//Updates the screen and check against errors
 		if (SDL_Flip(screen) == -1)
 		{
 			quit = true;
 		}
 
-		//Mantm a framerate
+		//Keep the frame rate
 		if (fpscap.getTicks() < 1000 / GAME_FPS)
 			SDL_Delay ( (1000 / GAME_FPS) - fpscap.getTicks());
 
-	}//while do loop principal
+	}//while (main loop)
 
-	//Funo de finalizao
+	//Finalization function
 	end_app();
 
 	return 0;
