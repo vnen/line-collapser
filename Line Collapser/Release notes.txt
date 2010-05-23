@@ -1,10 +1,18 @@
-///Last update: 2010/05/21 22:54 (UTC)
+///Last update: 2010/05/23 16:53 (UTC)
 
 ***************************************************
 * For now, all the notes and comments are in      *
 * brazilian portuguese.                           *
 * I know english poorly, but I'll translate the   *
 * notes and comments... I already started...      *
+***************************************************
+
+***************************************************
+* This file contains the list of known bugs, some *
+* changes and addings to do before the final      *
+* release. And, besides, a list of addings and    *
+* changes to do after the version 1.0 (the order  *
+* is not like the specified)                      *
 ***************************************************
 
 ***************************************************
@@ -32,14 +40,6 @@
 
 	- tetriminos now land in constant time (level-independent)
 
-
-***************************************************
-* This file contains the list of known bugs, some *
-* changes and addings to do before the final      *
-* release. And, besides, a list of addings and    *
-* changes to do after the version 1.0 (the order  *
-* is not like the specified)                      *
-***************************************************
 
 ***************************************************
 *                                                 *
