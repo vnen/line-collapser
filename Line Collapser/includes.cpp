@@ -80,11 +80,6 @@ int init()
 	if (SDL_Init (SDL_INIT_EVERYTHING) == -1)
 		{ return 1; }
 
-	//Inicializa o SDL_image e encerra se houver algum erro
-	/* It isn't working on Linux. On Windows, run fine without.
-	if ( !(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-		{ return 2; }*/
-
 	//Inicializa a SDL_ttf e encerra se houver algum erro
 	if (TTF_Init())
 		{ return 3; }
@@ -147,8 +142,6 @@ void end_app()
 	SDL_FreeSurface (Sline);
 
 	//Encerra as bibliotecas
-	/* It isn't working on Linux. On Windows, run fine without.
-	IMG_Quit ();*/
 	TTF_Quit ();
 	SDL_Quit ();
 }
