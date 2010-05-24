@@ -1,7 +1,7 @@
-///Last update: 2010/05/23 19:27 (UTC)
+///Last update: 2010/05/23 00:15 (UTC)
 
 ***************************************************
-* For now, all the notes and comments are in      *
+* For now, part of the notes and comments are in  *
 * brazilian portuguese.                           *
 * I know english poorly, but I'll translate the   *
 * notes and comments... I already started...      *
@@ -27,11 +27,17 @@
 
 - Space bar: rotate tetriminos counter-clockwise
 
+- Esc: Quit
+
 ***************************************************
 *                                                 *
 *                    Changes                      *
 *                                                 *
 ***************************************************
+
+- 0.8.0.4
+	- added a fix to the Flying tetraminos bug
+	- this change makes the tetramino move down instead finally lands, so it's a little weird when it's happening
 
 - 0.8.0.3
 
@@ -49,9 +55,9 @@
 *                                                 *
 ***************************************************
 
-- When the tetrimino lands, before launch of the next one, it don't move down anymore even if you move left/right over an empty space
-
 - Sometimes, rotation doesn't work or it's done twice (maybe a problem with event handler?)
+
+- When the tetrimino lands, before launch of the next one, it don't move down anymore even if you move left/right over an empty space (fixed 0.8.0.4)
 
 - The landing of tetriminos needs certain delay before to launch the next one (fixed 0.8.0.2)
 
@@ -64,37 +70,37 @@
 *                                                 *
 ***************************************************
 
-- Tetraminos aleatórios (desativado por enquanto, pois facilita os testes)
+- Random Tetraminos (deactivated for now, make the tests easier)
 
-- Telas inicial e final
+- Initial and final screens
 
-- Incluir som (mais difícil criar o som do que fazê-lo rodar)
+- Add sound (it is harder to make the sound than make it runs)
 
-- Criar um ícone
+- Make an icon (a decent one)
 
-- Deixar a movimentação independente da frame rate (acho que isso resolve os glitches de tempo)
+- Make the moving frame rate independent (I think it fix some timing glitches)
 
-- Criar um game over com opção de jogar novamente
+- Make a game over screen, with an option to play again
 
-- Armazenar High Scores
+- Store High Scores
 
 
 ***************************************************
 *                                                 *
-*            Implementações adicionais            *
+*            Additional Implementations           *
 *                                                 *
 ***************************************************
 
-- Função drop (não parece ser tão difícil, é só meter move_down até não poder mais, mas vou deixar pra depois)
+- Drop function (it doesn't seem to be hard, it's just call move_down till it returns false, but I'll leave that for later)
 
-- Na movimentação para a esquerda/direita, colocar um pequeno delay entre o primeiro movimento e os seguintes (assim como no Tetris original)
+- In the left/right movement, insert a small delay between the first move and the following moves (just like the original Tetris)
 
-- Função hold (deixar isso pra depois MESMO)
+- Hold function (like Tetris DS) (leave that for later. REALLY!)
 
-- Melhorar a rotação pra deixar girar mesmo no canto da tela ou encostado da pilha (movimentando o tetramino adequadamente)
+- Improve the rotation to let it turn even when the tetramino is in the sides of the screen or touching the stack (moving the tretramino accordingly)
 
-- Implementar a função dump
+- Implement the dump function (insert random lines in the bottom of screen)
 
-- Recriar com orientação a objetos (de verdade)
+- Recreate with object-oriented programming (a real OOP)
 
-- Refazer a interface usando OpenGL
+- Remake the graphical interface using OpenGL

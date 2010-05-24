@@ -222,7 +222,7 @@ int main (int argc, char* args[])
 					if(!bottom.isStarted())
 						bottom.start();
 				} //if (can't move down)
-				//If it moved down (this 'else' statement fix the flying tetraminos bug. At least I think so)
+				//If it moved down (this 'else' statement fix the 'flying tetraminos bug' partially)
 				else
 				{
 					//Stops the timer
@@ -233,93 +233,104 @@ int main (int argc, char* args[])
 			//If it tried to move down for time enough (750ms)
 			if (bottom.isStarted() && bottom.getTicks() > 750)
 			{
-
-				//Stops the timer
-				bottom.stop();
-
-				//Resets the actual tetramino
-				tetras[actual]->reset();
-
-				//Checks for full lines
-				fullLines = check_lines();
-
-				//If there is full lines
-				if (fullLines[0] > 0)
+				//Try to move down once, if it's possible so the tetramino shouldn't land
+				//It is the second and final part to fix the 'flying tetraminos bug'
+				if (tetras[actual]->move_down())
 				{
-					//Start the collapsing
-					collapsing = true;
+					bottom.stop();
+				}// if(can move down yet)
 
-					//Check how many lines are full
-					//and applies the correspondent score
-					switch(fullLines[0])
-					{
-					case 1:
-						score += 100;
-						break;
-					case 2:
-						score += 200;
-						break;
-					case 3:
-						score += 400;
-						break;
-					case 4:
-						score += 800;
-						break;
-					default:
-						break;
-					}//switch (full lines)
-
-					//Updates the line counter and the level
-					line += fullLines[0];
-					level = (int)1 + floor((double)line / 10);
-					//The level can be, at most, 10
-					level = level < 10 ? level : 10;
-
-				} //if (have full lines)
-				//If there isn't
-				else
-					//Free the memory which will no longer be used
-					free(fullLines);
-
-				//If it is collapsing lines
-				if (collapsing)
+				//If it isn't possible, so the tetramino must finally land
+				else //it can't move down anymore
 				{
-					//Make a copy of the lines that are collapsing, just to make the animation
-					//Goes through each column of the matrix
-					for (int i = 0; i < MATRIX_WIDTH; i++)
+					//Stops the timer
+					bottom.stop();
+
+					//Resets the actual tetramino
+					tetras[actual]->reset();
+
+					//Checks for full lines
+					fullLines = check_lines();
+
+					//If there is full lines
+					if (fullLines[0] > 0)
 					{
-						//For each line that needs to be removed
-						for (int j = 0; j < fullLines[0]; j++)
+						//Start the collapsing
+						collapsing = true;
+
+						//Check how many lines are full
+						//and applies the correspondent score
+						switch(fullLines[0])
 						{
-							//Copy to the backup, in the correspondent position
-							backup[j][i] = game_matrix[fullLines[j+1]][i];
+						case 1:
+							score += 100;
+							break;
+						case 2:
+							score += 200;
+							break;
+						case 3:
+							score += 400;
+							break;
+						case 4:
+							score += 800;
+							break;
+						default:
+							break;
+						}//switch (full lines)
 
-							// fullLines starts in 1, because fullLines[0] is the amount of lines
+						//Updates the line counter and the level
+						line += fullLines[0];
+						level = (int)1 + floor((double)line / 10);
+						//The level can be, at most, 10
+						level = level < 10 ? level : 10;
 
-						}//for (fullLines)
-					}//for (columns)
+					} //if (have full lines)
+					//If there isn't
+					else
+						//Free the memory which will no longer be used
+						free(fullLines);
 
-				}//if (collapsing)
-
-				//If there's no needing to collapse lines
-				else
-				{
-					//The next Tetramino now is the actual
-					actual = next;
-					//The next Tetramino is generated "randomly" (It isn't randomly to make tests easier)
-					next = get_next();
-
-					//Try to put the next Tetramino on the matrix
-					if (!tetras[actual]->put_in_matrix(true))
+					//If it is collapsing lines
+					if (collapsing)
 					{
-						//If it isn't possible, game over
-						//(here is the place to make an game over screen)
-						quit = true;
-					}//if (it couldn't put the next one on the matrix)
+						//Make a copy of the lines that are collapsing, just to make the animation
+						//Goes through each column of the matrix
+						for (int i = 0; i < MATRIX_WIDTH; i++)
+						{
+							//For each line that needs to be removed
+							for (int j = 0; j < fullLines[0]; j++)
+							{
+								//Copy to the backup, in the correspondent position
+								backup[j][i] = game_matrix[fullLines[j+1]][i];
 
-				}//if (there's no needing to collapse lines)
+								// fullLines starts in 1, because fullLines[0] is the amount of lines
 
-			}//if (it can't move down)
+							}//for (fullLines)
+						}//for (columns)
+
+					}//if (collapsing)
+
+					//If there's no needing to collapse lines
+					else
+					{
+						//The next Tetramino now is the actual
+						actual = next;
+						//The next Tetramino is generated "randomly" (It isn't randomly to make tests easier)
+						next = get_next();
+
+						//Try to put the next Tetramino on the matrix
+						if (!tetras[actual]->put_in_matrix(true))
+						{
+							//If it isn't possible, game over
+							//(here is the place to make an game over screen)
+							quit = true;
+						}//if (it couldn't put the next one on the matrix)
+
+					}//if (there's no needing to collapse lines)
+
+				}//if (it can't move down anymore)
+
+			}//if (tried to move for time enough)
 
 		}// if(!collapsing)
 
