@@ -1,0 +1,106 @@
+///Last update: 2010/05/23 00:15 (UTC)
+
+***************************************************
+* For now, part of the notes and comments are in  *
+* brazilian portuguese.                           *
+* I know english poorly, but I'll translate the   *
+* notes and comments... I already started...      *
+***************************************************
+
+***************************************************
+* This file contains the list of known bugs, some *
+* changes and addings to do before the final      *
+* release. And, besides, a list of addings and    *
+* changes to do after the version 1.0 (the order  *
+* is not like the specified)                      *
+***************************************************
+
+***************************************************
+*                                                 *
+*                  How to Play                    *
+*                                                 *
+***************************************************
+
+- Com'on it's Tetris!
+
+- Arrow keys: move tetriminos
+
+- Space bar: rotate tetriminos counter-clockwise
+
+- Esc: Quit
+
+***************************************************
+*                                                 *
+*                    Changes                      *
+*                                                 *
+***************************************************
+
+- 0.8.0.4
+	- added a fix to the Flying tetraminos bug
+	- this change makes the tetramino move down instead finally lands, so it's a little weird when it's happening
+
+- 0.8.0.3
+
+	- added GNU/Linux support (fixed c++ errors)
+	- started to translate pt-br to en
+	
+- 0.8.0.2
+
+	- tetriminos now land in constant time (level-independent)
+
+
+***************************************************
+*                                                 *
+*                 Bugs & Glitches                 *
+*                                                 *
+***************************************************
+
+- Sometimes, rotation doesn't work or it's done twice (maybe a problem with event handler?)
+
+- When the tetrimino lands, before launch of the next one, it don't move down anymore even if you move left/right over an empty space (fixed 0.8.0.4)
+
+- The landing of tetriminos needs certain delay before to launch the next one (fixed 0.8.0.2)
+
+- The landing isn't done in constant time: sometimes is faster, somtimes is slower (fixed 0.8.0.2)
+
+
+***************************************************
+*                                                 *
+*               Implementations to do             *
+*                                                 *
+***************************************************
+
+- Random Tetraminos (deactivated for now, make the tests easier)
+
+- Initial and final screens
+
+- Add sound (it is harder to make the sound than make it runs)
+
+- Make an icon (a decent one)
+
+- Make the moving frame rate independent (I think it fix some timing glitches)
+
+- Make a game over screen, with an option to play again
+
+- Store High Scores
+
+
+***************************************************
+*                                                 *
+*            Additional Implementations           *
+*                                                 *
+***************************************************
+
+- Drop function (it doesn't seem to be hard, it's just call move_down till it returns false, but I'll leave that for later)
+
+- In the left/right movement, insert a small delay between the first move and the following moves (just like the original Tetris)
+
+- Hold function (like Tetris DS) (leave that for later. REALLY!)
+
+- Improve the rotation to let it turn even when the tetramino is in the sides of the screen or touching the stack (moving the tretramino accordingly)
+
+- Implement the dump function (insert random lines in the bottom of screen)
+
+- Recreate with object-oriented programming (a real OOP)
+
+- Remake the graphical interface using OpenGL
