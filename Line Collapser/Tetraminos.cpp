@@ -21,10 +21,10 @@ namespace line_collapser
 
 	void I::draw_in_next()
 	{
-		insert_next ((NEXT_WIDTH / 2) - (2 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
-		insert_next ((NEXT_WIDTH / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
-		insert_next ((NEXT_WIDTH / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
-		insert_next ((NEXT_WIDTH / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) - (2 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
 
 	}//void I::draw_in_next()
 
@@ -63,10 +63,10 @@ namespace line_collapser
 
 	void O::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//void O::draw_in_next()
 
@@ -108,10 +108,10 @@ namespace line_collapser
 
 	void L::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
 
 	}//L::void draw_in_next()
 
@@ -153,10 +153,10 @@ namespace line_collapser
 
 	void J::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//J::void draw_in_next()
 
@@ -198,10 +198,10 @@ namespace line_collapser
 
 	void S::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//S::void draw_in_next()
 
@@ -243,10 +243,10 @@ namespace line_collapser
 
 	void Z::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//Z::void draw_in_next()
 
@@ -288,10 +288,10 @@ namespace line_collapser
 
 	void T::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
 
 	}//T::void draw_in_next()
 

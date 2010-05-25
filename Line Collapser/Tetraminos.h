@@ -1,5 +1,5 @@
-#ifndef _FALLING_TETRAMINOS_H_
-#define _FALLING_TETRAMINOS_H_
+#ifndef _LC_TETRAMINOS_H_
+#define _LC_TETRAMINOS_H_
 
 #include "Tetramino.h"
 

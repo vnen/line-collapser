@@ -1,5 +1,5 @@
-#ifndef _FALLING_TIMER_H_
-#define _FALLING_TIMER_H_
+#ifndef _LC_TIMER_H_
+#define _LC_TIMER_H_
 
 namespace line_collapser
 {
