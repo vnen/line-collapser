@@ -1,5 +1,5 @@
-#ifndef _FALLING_INCLUDES_H_
-#define _FALLING_INCLUDES_H_
+#ifndef _LC_INCLUDES_H_
+#define _LC_INCLUDES_H_
 
 
 #include <SDL/SDL.h>
@@ -10,16 +10,16 @@ namespace line_collapser
 {
 
 //Screen Attributes
-#define SCREEN_WIDTH  640
-#define SCREEN_HEIGHT  480
-#define SCREEN_BPP  32
+#define LC_SCREEN_WIDTH  640
+#define LC_SCREEN_HEIGHT  480
+#define LC_SCREEN_BPP  32
 
 //Frames per second
-#define GAME_FPS  60
+#define LC_GAME_FPS  60
 
 //Colors
-#define COLORS_AMOUNT  7
-enum BLOCK_COLOR 
+#define LC_COLORS_AMOUNT  7
+enum lcBlockColor 
 {
 	BLACK	,
 	BLUE	,
@@ -32,38 +32,38 @@ enum BLOCK_COLOR
 };
 
 //Matrix for game area
-#define MATRIX_WIDTH  10
-#define MATRIX_HEIGHT  20
+#define LC_MATRIX_WIDTH  10
+#define LC_MATRIX_HEIGHT  20
 
-extern BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH];
+extern lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH];
 
 //Game Area Attributes
-#define BLOCK_SIZE  20
-	//caixa do jogo
-#define GAME_X  267
-#define GAME_Y  40
-#define GAME_WIDTH  MATRIX_WIDTH * BLOCK_SIZE
-#define GAME_HEIGHT  MATRIX_HEIGHT * BLOCK_SIZE
-	//caixa do next
-#define NEXT_X  76
-#define NEXT_Y  200
-#define NEXT_WIDTH  100
-#define NEXT_HEIGHT  100
-	//caixa do score
-#define SCORE_X  46
-#define SCORE_Y  40
-#define SCORE_WIDTH  160
-#define SCORE_HEIGHT  70
-	//caixa da line
-#define LINE_X  520
-#define LINE_Y  153
-#define LINE_WIDTH  70
-#define LINE_HEIGHT  50
-	//caixa do level
-#define LEVEL_X  520
-#define LEVEL_Y  223
-#define LEVEL_WIDTH  70
-#define LEVEL_HEIGHT  50
+#define LC_BLOCK_SIZE  20
+	//game box
+#define LC_GAME_X  267
+#define LC_GAME_Y  40
+#define LC_GAME_WIDTH  LC_MATRIX_WIDTH * LC_BLOCK_SIZE
+#define LC_GAME_HEIGHT  LC_MATRIX_HEIGHT * LC_BLOCK_SIZE
+	//next box
+#define LC_NEXT_X  76
+#define LC_NEXT_Y  200
+#define LC_NEXT_WIDTH  100
+#define LC_NEXT_HEIGHT  100
+	//score box
+#define LC_SCORE_X  46
+#define LC_SCORE_Y  40
+#define LC_SCORE_WIDTH  160
+#define LC_SCORE_HEIGHT  70
+	//line box
+#define LC_LINE_X  520
+#define LC_LINE_Y  153
+#define LC_LINE_WIDTH  70
+#define LC_LINE_HEIGHT  50
+	//level box
+#define LC_LEVEL_X  520
+#define LC_LEVEL_Y  223
+#define LC_LEVEL_WIDTH  70
+#define LC_LEVEL_HEIGHT  50
 
 
 //Velocidade do bloco (em movimentos por segundo)
@@ -89,7 +89,7 @@ extern SDL_Surface* Sline;
 extern SDL_Surface* Slevel;
 
 //Sprites
-extern SDL_Surface* block_colors [COLORS_AMOUNT];
+extern SDL_Surface* block_colors [LC_COLORS_AMOUNT];
 
 //Event
 extern SDL_Event eventQ;
@@ -131,10 +131,10 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 /************************************************/
 
 //Insere um bloco de acordo com a matriz
-void insert_block (int x, int y, BLOCK_COLOR color = NONE);
+void insert_block (int x, int y, lcBlockColor color = NONE);
 
 //Insere um bloco na caixa next (com x,y relativo ao interior da caixa)
-void insert_next (int x, int y, BLOCK_COLOR color);
+void insert_next (int x, int y, lcBlockColor color);
 
 //Desenha a pontuao
 void print_score (int scoreNum);

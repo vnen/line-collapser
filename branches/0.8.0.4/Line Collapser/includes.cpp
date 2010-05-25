@@ -1,4 +1,5 @@
 #include "includes.h"
+#include "mersenne_twister.h"
 
 //Bibliotecas-padro
 #include <string>
@@ -17,7 +18,7 @@ namespace line_collapser
 											///**************Variables***************///
 											///**************************************///
 
-BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH] //[linha][coluna]
+lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH] //[linha][coluna]
 =	{{NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
      {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
@@ -62,7 +63,7 @@ SDL_Surface* Sline = NULL;
 SDL_Surface* Slevel = NULL;
 
 //Sprites
-SDL_Surface* block_colors [COLORS_AMOUNT];
+SDL_Surface* block_colors [LC_COLORS_AMOUNT];
 
 //Event
 SDL_Event eventQ;
@@ -85,7 +86,7 @@ int init()
 		{ return 3; }
 
 	//Cria a janela
-	screen = SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	screen = SDL_SetVideoMode (LC_SCREEN_WIDTH, LC_SCREEN_HEIGHT, LC_SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
 	//Carrega os arquivos necessrios e checa por erros
 	if (!load_files())
@@ -97,6 +98,9 @@ int init()
 	//Se houve algum erro com a janela, encerrar
 	if (screen == NULL)
 		{ return 6; }
+
+	//Start the random number generation function
+	mt_init();
 
 	//Se deu tudo certo
 	return 0;
@@ -112,7 +116,7 @@ bool load_files()
 
 	font = TTF_OpenFont ("fonts/r-impresive_6.ttf", 16);
 
-	for (int i = 0; i < COLORS_AMOUNT; i++)
+	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
 	{
 		char tmp[21];
 		sprintf(tmp, "images/block (%d).png", i+1);
@@ -134,7 +138,7 @@ void end_app()
 
 	//Libera as surfaces
 	SDL_FreeSurface (background);
-	for (int i = 0; i < COLORS_AMOUNT; i++)
+	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
 	{
 		SDL_FreeSurface (block_colors[i]);
 	}
@@ -152,20 +156,20 @@ void end_app()
 											/************************************************/
 
 //Insere um bloco de acordo com a matriz
-void insert_block (int x, int y, BLOCK_COLOR color)
+void insert_block (int x, int y, lcBlockColor color)
 {
 	if (color != NONE)
 	{
-		apply_surface ( (x * BLOCK_SIZE + GAME_X), (y * BLOCK_SIZE + GAME_Y), block_colors[(int)color], screen);
+		apply_surface ( (x * LC_BLOCK_SIZE + LC_GAME_X), (y * LC_BLOCK_SIZE + LC_GAME_Y), block_colors[(int)color], screen);
 	}
 }//insert_block
 
 //Insere um bloco na caixa next (com x,y relativo ao interior da caixa)
-void insert_next (int x, int y, BLOCK_COLOR color)
+void insert_next (int x, int y, lcBlockColor color)
 {
 	if (color != NONE)
 	{
-		apply_surface ( (x + NEXT_X), (y + NEXT_Y), block_colors[(int)color], screen);
+		apply_surface ( (x + LC_NEXT_X), (y + LC_NEXT_Y), block_colors[(int)color], screen);
 	}
 }//insert_next
 
@@ -183,8 +187,8 @@ void print_score (int scoreNum)
 
 	//Calcula a posio do score
 	//(este deve ficar alinhado abaixo e a direita da caixa, com 5px de margem)
-	int x = SCORE_X + SCORE_WIDTH - Sscore->w - 7;
-	int y = SCORE_Y + SCORE_HEIGHT - Sscore->h - 5;
+	int x = LC_SCORE_X + LC_SCORE_WIDTH - Sscore->w - 7;
+	int y = LC_SCORE_Y + LC_SCORE_HEIGHT - Sscore->h - 5;
 
 	//Aplica o texto
 	apply_surface (x, y, Sscore, screen);
@@ -205,8 +209,8 @@ void print_line (int lineNum)
 
 	//Calcula a posio da line
 	//(esta deve ficar centralizada na caixa, com 5px de margem para baixo)
-	int x = LINE_X + ((LINE_WIDTH - Sline->w) / 2);
-	int y = LINE_Y + LINE_HEIGHT - Sline->h - 5;
+	int x = LC_LINE_X + ((LC_LINE_WIDTH - Sline->w) / 2);
+	int y = LC_LINE_Y + LC_LINE_HEIGHT - Sline->h - 5;
 
 	//Aplica o texto
 	apply_surface (x, y, Sline, screen);
@@ -227,8 +231,8 @@ void print_level (int levelNum)
 
 	//Calcula a posio do level
 	//(este deve ficar centralizado na caixa, com 5px de margem para baixo)
-	int x = LEVEL_X + ((LEVEL_WIDTH - Slevel->w) / 2);
-	int y = LEVEL_Y + LEVEL_HEIGHT - Slevel->h - 5;
+	int x = LC_LEVEL_X + ((LC_LEVEL_WIDTH - Slevel->w) / 2);
+	int y = LC_LEVEL_Y + LC_LEVEL_HEIGHT - Slevel->h - 5;
 
 	//Aplica o texto
 	apply_surface (x, y, Slevel, screen);
@@ -240,8 +244,8 @@ void print_level (int levelNum)
 void paint_matrix ()
 {
 	//Percorre a matriz
-	for( int i = 0; i < MATRIX_HEIGHT; i++)
-		for( int j = 0; j < MATRIX_WIDTH; j++)
+	for( int i = 0; i < LC_MATRIX_HEIGHT; i++)
+		for( int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
 			insert_block (j, i, game_matrix[i][j]);
 		}//for
@@ -303,7 +307,7 @@ void collapse_line (int line)
 	for (int i = line; i >= 0; i--)
 	{
 		//Percorre cada clula dentro da linha
-		for (int j = 0; j < MATRIX_WIDTH; j++)
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
 			//Se for a linha mais alta (0) prenche com NONE, se no, apenas copia da linha de cima
 			game_matrix[i][j] = (i == 0 ? NONE : game_matrix[i-1][j]);
@@ -331,10 +335,10 @@ int* check_lines()
 	int filleds = 0;
 
 	//Percorre cada uma das linhas
-	for (int i = 0; i < MATRIX_HEIGHT; i++)
+	for (int i = 0; i < LC_MATRIX_HEIGHT; i++)
 	{
 		//Percorre cada clula dentro da linha
-		for (int j = 0; j < MATRIX_WIDTH; j++)
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
 			//Se estiver preenchido
 			if (game_matrix[i][j] != NONE)
@@ -345,7 +349,7 @@ int* check_lines()
 		}//for (clulas)
 
 		//Se todas esto preenchidas (filleds == 10)
-		if (filleds == MATRIX_WIDTH)
+		if (filleds == LC_MATRIX_WIDTH)
 		{
 			//Armazena no vetor de retorno, na posio seguinte
 			//Isto depende da quantidade de linhas que j foram preenchidas
@@ -379,13 +383,13 @@ int* check_lines()
 
 
 
-int nextsss = 0;
-//Gera um tetramino aleatrio
+
+//Generates a random tetramino (a number between 0 and 6)
 int get_next()
 {
-	//return SDL_GetTicks() % 7;
-	//Just for tests
-	return nextsss++ % 7;
+	//Returns a random number between 0 and 6
+	//It uses
+	return (int) mt_random() % 7 ;
 
 }//int get_next()
 
