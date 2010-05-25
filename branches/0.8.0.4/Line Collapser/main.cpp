@@ -50,10 +50,10 @@ int main (int argc, char* args[])
 	bool first = true;
 	
 	//Actual Tetramino
-	int actual = 0;
+	int actual = get_next();
 	
 	//Next Tetramino
-	int next = 1;
+	int next = get_next();
 	
 	//If it is collapsing lines
 	bool collapsing = false;
@@ -65,7 +65,7 @@ int main (int argc, char* args[])
 	Timer bottom;
 
 	//A copyfor some lines to make the collapsing animation
-	BLOCK_COLOR backup[4][MATRIX_WIDTH];
+	lcBlockColor backup[4][LC_MATRIX_WIDTH];
 
 	//A pointer to an integer array
 	//The first element is the amount of lines
@@ -188,7 +188,7 @@ int main (int argc, char* args[])
 		else if (!collapsing)
 		{
 			//Every 0.1 second
-			if (frame % (GAME_FPS/10) == 0)
+			if (frame % (LC_GAME_FPS/10) == 0)
 			{
 				//If the user is pressing the left arrow, move to left
 				if (moving_left)
@@ -200,7 +200,7 @@ int main (int argc, char* args[])
 			}// if (every 0.1 second)
 
 			//Every 0.05 second and if the user is pressing the down arrow
-			if ((moving_down && (frame % (GAME_FPS/20)) == 0))
+			if ((moving_down && (frame % (LC_GAME_FPS/20)) == 0))
 			{
 				//Move down the Tetramino and check if it is possible
 				bool scoring = tetras[actual]->move_down();
@@ -295,7 +295,7 @@ int main (int argc, char* args[])
 					{
 						//Make a copy of the lines that are collapsing, just to make the animation
 						//Goes through each column of the matrix
-						for (int i = 0; i < MATRIX_WIDTH; i++)
+						for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 						{
 							//For each line that needs to be removed
 							for (int j = 0; j < fullLines[0]; j++)
@@ -348,13 +348,13 @@ int main (int argc, char* args[])
 					 * In the last step the line is hidden
 					 */
 
-					if (counting <= (GAME_FPS/10) || (counting > (2*GAME_FPS/10) && counting <= (3*GAME_FPS/10)) ||
-							(counting > (4*GAME_FPS/10) && counting <= (5*GAME_FPS/10)) ||
-							(counting > (6*GAME_FPS/10) && counting <= (7*GAME_FPS/10)) ||
-							(counting > (8*GAME_FPS/10) && counting <= (9*GAME_FPS/10)))
+					if (counting <= (LC_GAME_FPS/10) || (counting > (2*LC_GAME_FPS/10) && counting <= (3*LC_GAME_FPS/10)) ||
+							(counting > (4*LC_GAME_FPS/10) && counting <= (5*LC_GAME_FPS/10)) ||
+							(counting > (6*LC_GAME_FPS/10) && counting <= (7*LC_GAME_FPS/10)) ||
+							(counting > (8*LC_GAME_FPS/10) && counting <= (9*LC_GAME_FPS/10)))
 					//Hides
 					//This function is almost identical to the backuo function, but it erases instead copy
-					for (int i = 0; i < MATRIX_WIDTH; i++)
+					for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)
 						{
@@ -365,13 +365,13 @@ int main (int argc, char* args[])
 					/* I think it's important to notice that the values in both if statements are the same
 					 * What changes is the comparison operator
 					 */
-					if ((counting > (GAME_FPS/10) && counting <= (2*GAME_FPS/10)) ||
-							(counting > (3*GAME_FPS/10) && counting <= (4*GAME_FPS/10)) ||
-							(counting > (5*GAME_FPS/10) && counting <= (6*GAME_FPS/10)) ||
-							(counting > (7*GAME_FPS/10) && counting <= (8*GAME_FPS/10)))
+					if ((counting > (LC_GAME_FPS/10) && counting <= (2*LC_GAME_FPS/10)) ||
+							(counting > (3*LC_GAME_FPS/10) && counting <= (4*LC_GAME_FPS/10)) ||
+							(counting > (5*LC_GAME_FPS/10) && counting <= (6*LC_GAME_FPS/10)) ||
+							(counting > (7*LC_GAME_FPS/10) && counting <= (8*LC_GAME_FPS/10)))
 					//Shows
 					//This function is almost identical to the backup function, but it copies from backup to matrix, instead the opposite
-					for (int i = 0; i < MATRIX_WIDTH; i++)
+					for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)
 						{
@@ -381,7 +381,7 @@ int main (int argc, char* args[])
 
 
 				//If the counting is beyond the last step
-				if (counting > (9*GAME_FPS/10))
+				if (counting > (9*LC_GAME_FPS/10))
 				{
 					//For each fullLine
 					for (int i = 0; i < fullLines[0]; i++)
@@ -441,8 +441,8 @@ int main (int argc, char* args[])
 		}
 
 		//Keep the frame rate
-		if (fpscap.getTicks() < 1000 / GAME_FPS)
-			SDL_Delay ( (1000 / GAME_FPS) - fpscap.getTicks());
+		if (fpscap.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fpscap.getTicks());
 
 	}//while (main loop)
 

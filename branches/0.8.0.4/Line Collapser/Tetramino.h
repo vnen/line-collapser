@@ -1,5 +1,5 @@
-#ifndef _FALLING_TETRAMINO_H_
-#define _FALLING_TETRAMINO_H_
+#ifndef _LC_TETRAMINO_H_
+#define _LC_TETRAMINO_H_
 
 #include "includes.h"
 
@@ -14,7 +14,7 @@ class Tetramino
 {
 protected:
 	unsigned short int matrix[4][4];
-	BLOCK_COLOR cor;
+	lcBlockColor cor;
 	int x, y; //posiXXo da matriz do Tetramino dentro da matriz principal do jogo
 	//MXximo de estados (orientaXXes) possXveis
 	unsigned short int max_states;

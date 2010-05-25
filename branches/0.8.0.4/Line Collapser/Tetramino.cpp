@@ -43,7 +43,7 @@ namespace line_collapser
 						}//if
 					}//if
 					//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-					if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+					if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					{
 						if (matrix[i][j] == 1)
 						{
@@ -68,7 +68,7 @@ namespace line_collapser
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
 				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -119,7 +119,7 @@ namespace line_collapser
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
 				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -194,7 +194,7 @@ namespace line_collapser
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
 				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -269,7 +269,7 @@ namespace line_collapser
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
 				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -357,7 +357,7 @@ namespace line_collapser
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
 				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
