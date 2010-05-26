@@ -280,7 +280,7 @@ int main (int argc, char* args[])
 
 						//Updates the line counter and the level
 						line += fullLines[0];
-						level = (int)1 + floor((double)line / 10);
+						level = 1 + (int)floor((double)line / 10);
 						//The level can be, at most, 10
 						level = level < 10 ? level : 10;
 
