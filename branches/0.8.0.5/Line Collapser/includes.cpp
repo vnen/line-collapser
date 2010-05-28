@@ -42,8 +42,8 @@ lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH] //[line][column]
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE}};
 
-//Velocidade do bloco (em movimentos por segundo)
-int block_mps = 1;
+//Blocks speeds (in moves per second) ****NOT USED
+//int block_mps = 1;
 
 //Dados
 int score = 0;
@@ -55,6 +55,9 @@ SDL_Surface* screen = NULL;
 
 //Images
 SDL_Surface* background = NULL;
+
+//Sounds
+Mix_Music* bgm = NULL;
 
 //Fonts
 TTF_Font* font = NULL;
@@ -76,44 +79,54 @@ SDL_Event eventQ;
 										///****************Basic*****************///
 										///**************************************///
 
-//Inicializa o sistema
+//Initializes the system
 int init()
 {
-	//Inicializa o SDL e encerra se houver algum erro
+	//Initializes the SDL and exit if there was an error
 	if (SDL_Init (SDL_INIT_EVERYTHING) == -1)
 		{ return 1; }
 
-	//Inicializa a SDL_ttf e encerra se houver algum erro
+	//Initializes the SDL_ttf and exit if there was an error
 	if (TTF_Init())
 		{ return 3; }
 
-	//Cria a janela
+	//Initializes the SDL_mixer and exit if there was an error
+	if (Mix_OpenAudio(LC_SOUND_SAMPLERATE, LC_SOUND_FORMAT, LC_SOUND_CHANNELS, LC_SOUND_CHUNKSIZE) == -1)
+		{ return 4; }
+
+	//Create the window
 	screen = SDL_SetVideoMode (LC_SCREEN_WIDTH, LC_SCREEN_HEIGHT, LC_SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
-	//Carrega os arquivos necessrios e checa por erros
+	//Load the necessary files and check for errors
 	if (!load_files())
 		{ return 5; }
 
-	//Alera o ttulo
+	//Changes the window title
 	SDL_WM_SetCaption ("Line Collapser", NULL);
 
-	//Se houve algum erro com a janela, encerrar
+	//If there was an error with the window creation, exits the program
 	if (screen == NULL)
 		{ return 6; }
 
 	//Start the random number generation function
 	mt_init();
 
-	//Se deu tudo certo
+	//If everything went fine
 	return 0;
 
 }//init()
 
-//Carrega os arquivos necessrios
+//Loads the necessaries files
 bool load_files()
 {
+	//Opens background image
 	background = load_image ("images/background.png");
 	if (background == NULL)
+		{ return false; }
+
+	//Opens background image
+	bgm = Mix_LoadMUS ("sounds/mainbgm.ogg");
+	if (bgm == NULL)
 		{ return false; }
 
 	font = TTF_OpenFont ("fonts/r-impresive_6.ttf", 16);
@@ -132,10 +145,16 @@ bool load_files()
 }//load_files()
 
 
-//Libera a memria e encerra o sistema
+//Frees the memory and closes system
 void end_app()
 {
-	//Fecha a fonte
+	//Stops the music
+	Mix_HaltMusic();
+
+	//Close the music
+	Mix_FreeMusic(bgm);
+
+	//Closes the font
 	TTF_CloseFont (font);
 
 	//Libera as surfaces
@@ -147,7 +166,8 @@ void end_app()
 	SDL_FreeSurface (Sscore);
 	SDL_FreeSurface (Sline);
 
-	//Encerra as bibliotecas
+	//Closes the libraries
+	Mix_CloseAudio();
 	TTF_Quit ();
 	SDL_Quit ();
 }

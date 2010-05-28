@@ -4,6 +4,7 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
 #include <string>
 
 
@@ -14,6 +15,12 @@ namespace line_collapser
 #define LC_SCREEN_WIDTH  640
 #define LC_SCREEN_HEIGHT  480
 #define LC_SCREEN_BPP  32
+
+//Sound Attributes
+#define LC_SOUND_SAMPLERATE		22500
+#define LC_SOUND_FORMAT			MIX_DEFAULT_FORMAT
+#define LC_SOUND_CHANNELS		2
+#define LC_SOUND_CHUNKSIZE		4096
 
 //Frames per second
 #define LC_GAME_FPS  60
@@ -81,6 +88,9 @@ extern SDL_Surface* screen;
 
 //Images
 extern SDL_Surface* background;
+
+//Sounds
+extern Mix_Music* bgm;
 
 //Fonts
 extern TTF_Font* font;
