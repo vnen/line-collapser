@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include "Tetraminos.h"
+#include "sounds.h"
 
 #include <string>
 #include <cstdlib>
@@ -14,20 +15,24 @@ int main (int argc, char* args[])
 	//Initialization function
 	//Exit the program if some error occurred
 	int errorlevel = init();
-	if (errorlevel != 0)
-	{
-		if(SDL_WasInit(SDL_INIT_EVERYTHING) != 0)
-		{ //If the SDL was initialized, turn it off
-			SDL_Quit();
+	if(errorlevel >= 1)
+	{ //If the SDL was initialized, turn it off
+		SDL_Quit();
 
-			if(TTF_WasInit() == 1)
-			{ //If the SDL_ttf was initialized, turn it off
-				TTF_Quit();
-			}
-		}
+		if(errorlevel >= 3)
+		{ //If the SDL_ttf was initialized, turn it off
+			TTF_Quit();
+
+			if(errorlevel >= 4)
+			{ //If the SDL_mixer was initialized, turn it off
+				Mix_CloseAudio();
+			}// >=4
+		}// >=3
 
 		return errorlevel;
-	}
+
+	}// init error
+
 
 	//Timer to control the blocks speed (actually, it controls the frame rate)
 	Timer fpscap;
@@ -78,6 +83,11 @@ int main (int argc, char* args[])
 	bool moving_right = false;
 
 
+	//Before start the main loop, start playing the background music
+	bool playingBgm = line_collapser::playMainBgm();
+
+	//To avoid warnings when it is still not used
+	playingBgm = playingBgm;
 
 
 	//Main loop
