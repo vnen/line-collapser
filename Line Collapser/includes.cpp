@@ -1,6 +1,7 @@
 #include "includes.h"
 #include "mersenne_twister.h"
 #include "lcwin32.h"
+#include "Timer.h"
 
 //Bibliotecas-padro
 #include <string>
@@ -393,6 +394,124 @@ int get_next()
 	return (int) mt_random() % 7 ;
 
 }//int get_next()
+
+
+
+
+
+
+
+//Pauses the game
+/** returns 'true' if the user wants to quit */
+bool lcpause()
+{
+	//Makes a backup of game_matrix
+	lcBlockColor matrix_backup[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH];
+	/** Make the screen full of grey blocks
+	 * so the player won't have time to think when paused
+	 * (cheating isn't allowed =P)
+	 * Ah, and with a simple stacking animation
+	 */
+	for (int i = LC_MATRIX_HEIGHT - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
+		{
+			matrix_backup[i][j] = game_matrix[i][j];
+			game_matrix[i][j] = GREY;
+		}//for (each line)
+
+		//So the animation
+		//Puts the matrix on screen
+		paint_matrix();
+
+		//Updates the screen and check against errors
+		if (SDL_Flip(screen) == -1)
+		{
+			return true;
+		}
+		SDL_Delay(20);
+
+	}//for (each column)
+
+	//Puts the matrix on screen
+	paint_matrix();
+
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		return true;
+	}
+
+
+	//If the user wants to quit while paused
+	bool quit = false;
+
+	//Create a loop like the main
+	Timer fps;
+	bool pause = true;
+	while (pause)
+	{
+		//Starts the timer to cap the frame rate
+		fps.start();
+
+		//Captures the unpause and quit events
+		while (SDL_PollEvent (&eventQ))
+		{
+			//Captures the type of event
+			switch (eventQ.type)
+			{
+			//If the user try to close the window
+			case SDL_QUIT:
+				//Sets the flag to quit the main loop
+				quit = true;
+				break;
+			//If the user has pressed a key
+			case SDL_KEYDOWN:
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
+				{
+					pause = false;
+					quit = true;								//Sets the flag to quit the main loop
+				}
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
+				{
+					pause = false;
+					quit = true;								//Sets the flag to quit the main loop
+				}
+
+				//If the user pressed the space bar
+				if (eventQ.key.keysym.sym == SDLK_SPACE)
+				{
+					pause = false;
+				}
+
+				break;
+			}//switch events
+		}//while events
+
+		/** Caps the frame rate
+		 * We don't the game runs on a super speed (even if there is no animation)
+		 * because it will consume CPU/RAM resources without needing
+		 */
+		if (fps.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fps.getTicks());
+
+	}//while (pause)
+
+	//Turns back to the game
+	for (int i = 0; i < LC_MATRIX_HEIGHT; i++)
+	{
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
+		{
+			game_matrix[i][j] = matrix_backup[i][j];
+		}//for (each line)
+	}//for (each column)
+
+	return quit;
+}
 
 
 

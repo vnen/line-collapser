@@ -19,7 +19,7 @@ namespace line_collapser
 #define LC_GAME_FPS  60
 
 //Colors
-#define LC_COLORS_AMOUNT  7
+#define LC_COLORS_AMOUNT  8
 enum lcBlockColor 
 {
 	BLACK	,
@@ -29,6 +29,7 @@ enum lcBlockColor
 	RED		,
 	VIOLET	,
 	YELLOW	,
+	GREY	,
 	NONE = 99
 };
 
@@ -163,6 +164,10 @@ int* check_lines();
 //Gera um tetramino aleatrio
 //(poderia usar direto a funo 'random()', mas aqui posso usar um seed diferente sem comprometer o cdigo)
 int get_next();
+
+//Pauses the game
+/** returns 'true' if the user wants to quit */
+bool lcpause();
 
 
 }//namespace

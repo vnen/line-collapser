@@ -129,10 +129,16 @@ int main (int argc, char* args[])
 					moving_down = true;
 				}
 
-				//If the space bar was pressed, rotate (counter-clockwise)
-				if (eventQ.key.keysym.sym == SDLK_SPACE)
+				//If the 'Z' key was pressed, rotate (counter-clockwise)
+				if (eventQ.key.keysym.sym == SDLK_z)
 				{
 					tetras[actual]->rotate();
+				}
+
+				//If the space bar was pressed, pause
+				if (eventQ.key.keysym.sym == SDLK_SPACE)
+				{
+					quit = lcpause();
 				}
 				break;
 
@@ -431,7 +437,7 @@ int main (int argc, char* args[])
 		//Writes the actual level
 		print_level (level);
 
-		//Writes the matrix
+		//Puts the matrix on screen
 		paint_matrix();
 
 		//Updates the screen and check against errors
