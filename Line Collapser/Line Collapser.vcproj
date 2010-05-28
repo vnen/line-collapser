@@ -65,6 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/NODEFAULTLIB:msvcrt.lib"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_ttf.lib SDL_image.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -212,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\lcwin32.h"
+				>
+			</File>
+			<File
 				RelativePath=".\mersenne_twister.h"
 				>
 			</File>
@@ -242,11 +247,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\Design\Images\icon1.ico"
+				RelativePath=".\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\icon1.ico"
+				RelativePath="..\Design\Images\icon1.ico"
 				>
 			</File>
 			<File
