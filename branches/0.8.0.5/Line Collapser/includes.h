@@ -6,12 +6,6 @@
 #include <SDL/SDL_ttf.h>
 #include <string>
 
-/* Use 'sprintf_s()' instead of 'sprintf()' when compiled on Windows
- * (remove the warnings)
- */
-#ifdef _WIN32
-#define sprintf sprintf_s
-#endif
 
 namespace line_collapser
 {

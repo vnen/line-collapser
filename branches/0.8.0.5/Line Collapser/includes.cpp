@@ -1,5 +1,6 @@
 #include "includes.h"
 #include "mersenne_twister.h"
+#include "lcwin32.h"
 
 //Bibliotecas-padro
 #include <string>
@@ -18,7 +19,7 @@ namespace line_collapser
 											///**************Variables***************///
 											///**************************************///
 
-lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH] //[linha][coluna]
+lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH] //[line][column]
 =	{{NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
      {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
