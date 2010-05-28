@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sounds.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Tetramino.cpp"
 				>
 			</File>
@@ -229,6 +233,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sounds.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Tetramino.h"
 				>
 			</File>
@@ -247,11 +255,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\icon1.ico"
+				RelativePath="..\Design\Images\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\Design\Images\icon1.ico"
+				RelativePath=".\icon1.ico"
 				>
 			</File>
 			<File
