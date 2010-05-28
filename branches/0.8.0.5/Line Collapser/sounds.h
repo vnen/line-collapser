@@ -8,6 +8,12 @@
 #ifndef _LC_SOUNDS_H_
 #define _LC_SOUNDS_H_
 
+//Constants
+#define LC_MUSIC_STOPPED	0
+#define LC_MUSIC_PLAYING	1
+#define LC_MUSIC_PAUSED		2
+
+
 namespace line_collapser
 {
 
@@ -19,6 +25,10 @@ bool playStartBgm();
 
 //Plays a specific sound effect (of the list I'll make when I have the sound)
 bool playEffect(int effect);
+
+//Pauses music
+//Returns the playing state after the function runs
+int musicTogglePause();
 
 }//namespace
 
