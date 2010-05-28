@@ -2,13 +2,14 @@
 #include "mersenne_twister.h"
 #include "lcwin32.h"
 #include "Timer.h"
+#include "sounds.h"
 
-//Bibliotecas-padro
+//Standard libraries
 #include <string>
 #include <cstdlib>
 #include <math.h>
 
-//Bibliotecas extras
+//SDL libraries
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
@@ -45,7 +46,7 @@ lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH] //[line][column]
 //Blocks speeds (in moves per second) ****NOT USED
 //int block_mps = 1;
 
-//Dados
+//Data
 int score = 0;
 int level = 1;
 int line = 0;
@@ -157,7 +158,7 @@ void end_app()
 	//Closes the font
 	TTF_CloseFont (font);
 
-	//Libera as surfaces
+	//Frees the surfaces
 	SDL_FreeSurface (background);
 	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
 	{
@@ -177,7 +178,7 @@ void end_app()
 											/****************Basic Drawing*******************/
 											/************************************************/
 
-//Insere um bloco de acordo com a matriz
+//Insert a block, according to the matrix
 void insert_block (int x, int y, lcBlockColor color)
 {
 	if (color != NONE)
@@ -186,7 +187,7 @@ void insert_block (int x, int y, lcBlockColor color)
 	}
 }//insert_block
 
-//Insere um bloco na caixa next (com x,y relativo ao interior da caixa)
+//Insert a block in next box (with x,y relative to the interior of the box)
 void insert_next (int x, int y, lcBlockColor color)
 {
 	if (color != NONE)
@@ -195,77 +196,77 @@ void insert_next (int x, int y, lcBlockColor color)
 	}
 }//insert_next
 
-//Desenha a pontuao
+//Draws score
 void print_score (int scoreNum)
 {
-	SDL_Color cor = {0,0,0};	//Cor RGB(0,0,0)
-	char scoreChar[50];			//Score em 'char'
+	SDL_Color cor = {0,0,0};	//Color RGB(0,0,0)
+	char scoreChar[50];			//Score in 'char'
 
-	sprintf(scoreChar, "%d", scoreNum);	//Converte o score para 'char'
+	sprintf(scoreChar, "%d", scoreNum);	//Converts score to 'char'
 
-	//Armazena a surface para o score
+	//Frees the old and store the new surface for score
 	SDL_FreeSurface (Sscore);
 	Sscore = TTF_RenderText_Solid (font, scoreChar, cor);
 
-	//Calcula a posio do score
-	//(este deve ficar alinhado abaixo e a direita da caixa, com 5px de margem)
+	//Calculate the score's position
+	//(it must stay aligned down-right of the box, with a 5px margin)
 	int x = LC_SCORE_X + LC_SCORE_WIDTH - Sscore->w - 7;
 	int y = LC_SCORE_Y + LC_SCORE_HEIGHT - Sscore->h - 5;
 
-	//Aplica o texto
+	//Applies the text
 	apply_surface (x, y, Sscore, screen);
 }//print_score
 
 
-//Desenha a quantidade de linhas
+//Draws the number of lines collapsed
 void print_line (int lineNum)
 {
-	SDL_Color cor = {0,0,0};			//Cor RGB(0,0,0)
-	char lineChar[50];					//Line em 'char'
+	SDL_Color cor = {0,0,0};			//Color RGB(0,0,0)
+	char lineChar[50];					//Line in 'char'
 
-	sprintf(lineChar, "%d", lineNum);	//Converte a line para 'char'
+	sprintf(lineChar, "%d", lineNum);	//Converts line to 'char'
 
-	//Armazena a surface para a line
+	//Frees the old and store the new surface for line
 	SDL_FreeSurface (Sline);
 	Sline = TTF_RenderText_Solid (font, lineChar, cor);
 
-	//Calcula a posio da line
-	//(esta deve ficar centralizada na caixa, com 5px de margem para baixo)
+	//Calculate the line's position
+	//(it must be centralized in the box, with a 5px margin-bottom)
 	int x = LC_LINE_X + ((LC_LINE_WIDTH - Sline->w) / 2);
 	int y = LC_LINE_Y + LC_LINE_HEIGHT - Sline->h - 5;
 
-	//Aplica o texto
+	//Applies the text
 	apply_surface (x, y, Sline, screen);
 }//print_line
 
 
-//Desenha o nvel
+//Draws the level
 void print_level (int levelNum)
 {
-	SDL_Color cor = {0,0,0};	//Cor RGB(0,0,0)
-	char levelChar[50];			//Level em 'char'
+	SDL_Color cor = {0,0,0};	//Color RGB(0,0,0)
+	char levelChar[50];			//Level in 'char'
 
-	sprintf(levelChar, "%d", levelNum);	//Converte o level para 'char'
+	sprintf(levelChar, "%d", levelNum);	//Converts level to 'char'
 
-	//Armazena a surface para a level
+	//Frees the old and store the new surface for score
 	SDL_FreeSurface (Slevel);
 	Slevel = TTF_RenderText_Solid (font, levelChar, cor);
 
-	//Calcula a posio do level
-	//(este deve ficar centralizado na caixa, com 5px de margem para baixo)
+	//Calculate level's position
+	//(it must be centralized in the box, with a 5px margin-bottom)
 	int x = LC_LEVEL_X + ((LC_LEVEL_WIDTH - Slevel->w) / 2);
 	int y = LC_LEVEL_Y + LC_LEVEL_HEIGHT - Slevel->h - 5;
 
-	//Aplica o texto
+	//Applies the text
 	apply_surface (x, y, Slevel, screen);
 
 }//print_level
 
 
-//Desenha a matriz
+//Draws the matrix
 void paint_matrix ()
 {
-	//Percorre a matriz
+	//Goes through matrix
 	for( int i = 0; i < LC_MATRIX_HEIGHT; i++)
 		for( int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
@@ -274,7 +275,7 @@ void paint_matrix ()
 }//paint_matrix
 
 									/************************************************/
-									/**************Especific Drawing*****************/
+									/***************Specific Drawing*****************/
 									/************************************************/
 
 SDL_Surface *load_image( std::string filename )
@@ -322,16 +323,16 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 										/*****************Game functions*****************/
 										/************************************************/
 
-//Retira uma linha da matriz
+//Collapse a line from matriz
 void collapse_line (int line)
 {
-	//Percorre a partir da linha para cima
+	//Goes through the matrix from the line to top
 	for (int i = line; i >= 0; i--)
 	{
-		//Percorre cada clula dentro da linha
+		//Goes through each cell into the line
 		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
-			//Se for a linha mais alta (0) prenche com NONE, se no, apenas copia da linha de cima
+			//If it is the line at the top (0) fills with NONE, else, just copy from the line above
 			game_matrix[i][j] = (i == 0 ? NONE : game_matrix[i-1][j]);
 		}//for
 	}//for
@@ -341,11 +342,11 @@ void collapse_line (int line)
 
 
 
-//Checa por linhas completas e retorna um vetor no formato:
-//{ qtd de linhas, linha 1, linha 2, linha 3, linha 4 }
+//Checks for full lines and returns a vector in the format:
+//{ ammount of lines, line 1, line 2, line 3, line 4 }
 int* check_lines()
 {
-	//Armazena as informaes para retorno
+	//Stores the information to return
 	int* tmp;
 	tmp = (int*) malloc( sizeof(int)*5 );
 	for (int i = 0; i < 5; i++)
@@ -353,28 +354,28 @@ int* check_lines()
 		tmp[i] = 0;
 	}//for
 
-	//Armazena a quantidade de blocos por linha
+	//Stores the ammount of filled cells per line
 	int filleds = 0;
 
-	//Percorre cada uma das linhas
+	//Goes through each line
 	for (int i = 0; i < LC_MATRIX_HEIGHT; i++)
 	{
-		//Percorre cada clula dentro da linha
+		//Goes through each cell inside the line
 		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
-			//Se estiver preenchido
+			//If it is filled
 			if (game_matrix[i][j] != NONE)
 			{
-				//Acrescenta 1 aos filleds
+				//Increments filleds
 				filleds++;
 			}
-		}//for (clulas)
+		}//for (cells)
 
-		//Se todas esto preenchidas (filleds == 10)
+		//If everyone is filled (filleds == width of matrix)
 		if (filleds == LC_MATRIX_WIDTH)
 		{
-			//Armazena no vetor de retorno, na posio seguinte
-			//Isto depende da quantidade de linhas que j foram preenchidas
+			//Stores in the return vector, in the next empty position
+			//It depends on how many lines are filled and already checked
 			switch (tmp[0])
 			{
 			case 0:
@@ -385,8 +386,8 @@ int* check_lines()
 				tmp[tmp[0]] = i;
 				break;
 
-			//Se chegar no limite (4) j retorna para economizar CPU
-			//e evitar um acesso indevido  memria
+			//If it arrives the limit (4) returns at once to save CPU
+			//and avoid a undue access to memory
 			case 4:
 				tmp[0] = tmp[0] + 1;
 				tmp[tmp[0]] = i;
@@ -397,7 +398,7 @@ int* check_lines()
 		}// if (filleds)
 		filleds = 0;
 
-	}//for (linhas)
+	}//for (lines)
 
 	return tmp;
 }//int* check_lines()
@@ -425,6 +426,9 @@ int get_next()
 /** returns 'true' if the user wants to quit */
 bool lcpause()
 {
+	//No music when the game is paused
+	int musicState = musicTogglePause();
+
 	//Makes a backup of game_matrix
 	lcBlockColor matrix_backup[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH];
 	/** Make the screen full of grey blocks
@@ -530,6 +534,9 @@ bool lcpause()
 		}//for (each line)
 	}//for (each column)
 
+	//Now we turn on the music again... if it is paused
+	if (musicState == LC_MUSIC_PAUSED)
+		musicTogglePause();
 	return quit;
 }
 
