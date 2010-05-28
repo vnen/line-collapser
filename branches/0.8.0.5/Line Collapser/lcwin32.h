@@ -14,9 +14,11 @@
 #ifdef _WIN32
 
 /* Use 'sprintf_s()' instead of 'sprintf()' when compiled on Windows
- * (remove the warnings)
+ * (removes the warnings)
  */
 #define sprintf sprintf_s
+
+
 
 #endif
 
