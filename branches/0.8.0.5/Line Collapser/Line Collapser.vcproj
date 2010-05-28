@@ -5,6 +5,10 @@
 	Name="Line Collapser"
 	ProjectGUID="{8A05E6AE-4F72-4DFF-A2BC-5E9299D8CA59}"
 	RootNamespace="LineCollapser"
+	SccProjectName="Svn"
+	SccAuxPath="Svn"
+	SccLocalPath="Svn"
+	SccProvider="SubversionScc"
 	Keyword="Win32Proj"
 	AssemblyReferenceSearchPaths="&quot;.\library&quot;"
 	TargetFrameworkVersion="196613"
@@ -238,11 +242,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\icon1.ico"
+				RelativePath="..\Design\Images\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\Design\Images\icon1.ico"
+				RelativePath=".\icon1.ico"
 				>
 			</File>
 			<File
