@@ -16,12 +16,12 @@ namespace line_collapser
 bool playMainBgm()
 {
 	//If there isn't a bgm loaded
-	if (bgm == NULL)
+	if (sndBgm == NULL)
 		{ return false; } //Returns a error
 
 	//Plays the bgm forever
 	//And checks for error
-	if (Mix_PlayMusic(bgm, -1) == -1)
+	if (Mix_PlayMusic(sndBgm, -1) == -1)
 		{ return false; }
 
 	return true;
@@ -58,5 +58,25 @@ int musicTogglePause()
 	return LC_MUSIC_STOPPED;
 
 } //void musicTogglePause()
+
+
+
+
+
+
+
+/* Find out the filename for the sound effect number
+ */
+char* whichSound(int fx)
+{
+	switch (fx)
+	{
+	case 0:
+		return "collapse.ogg";
+		break;
+	default:
+		return "error";
+	}
+} // char* whichSound(int fx)
 
 }//namespace

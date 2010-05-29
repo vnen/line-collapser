@@ -51,6 +51,11 @@ int main (int argc, char* args[])
 	/********************/
 	//****** Data ******//
 	/********************/
+
+	//Music and FX enabled state
+	bool music = true;
+	bool soundFX = true;
+
 	//If it is the first iteration
 	bool first = true;
 	
@@ -69,7 +74,7 @@ int main (int argc, char* args[])
 	//Counting to wait the landing of Tetraminos
 	Timer bottom;
 
-	//A copyfor some lines to make the collapsing animation
+	//A copy for some lines to make the collapsing animation
 	lcBlockColor backup[4][LC_MATRIX_WIDTH];
 
 	//A pointer to an integer array
@@ -84,7 +89,9 @@ int main (int argc, char* args[])
 
 
 	//Before start the main loop, start playing the background music
-	bool playingBgm = line_collapser::playMainBgm();
+	bool playingBgm = false;
+	if (music)
+		playingBgm = line_collapser::playMainBgm();
 
 	//To avoid warnings when it is still not used
 	playingBgm = playingBgm;
@@ -148,6 +155,14 @@ int main (int argc, char* args[])
 				//If the space bar was pressed, pause
 				if (eventQ.key.keysym.sym == SDLK_SPACE)
 				{
+					/* If the player pauses the game,
+					 * all the movements should be canceled
+					 * because during pause we could miss a KEY_UP event
+					 */
+					moving_down = false;
+					moving_left = false;
+					moving_right = false;
+
 					quit = lcpause();
 				}
 				break;
@@ -324,6 +339,10 @@ int main (int argc, char* args[])
 							}//for (fullLines)
 						}//for (columns)
 
+						//Plays the sound effect
+						if(soundFX)
+							if(sndFX[LC_SOUND_FX_COLLAPSE] != NULL)
+							Mix_PlayChannel(-1, sndFX[LC_SOUND_FX_COLLAPSE], 0);
 					}//if (collapsing)
 
 					//If there's no needing to collapse lines

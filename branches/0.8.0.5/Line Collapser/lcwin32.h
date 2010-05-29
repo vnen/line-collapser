@@ -2,7 +2,7 @@
  * lcwin32.h
  *
  *  Created on: 27/05/2010
- *      Author: root
+ *      Author: George Marques
  */
 
 #ifndef _LC_LCWIN32_H_
@@ -13,6 +13,11 @@
  */
 #ifdef _WIN32
 
+/* These things don't work when using MinGW
+ * so I defined a symbol to avoid errors
+ */
+#ifndef __MINGW32
+
 /* Use 'sprintf_s()' instead of 'sprintf()' when compiled on Windows
  * (removes the warnings)
  */
@@ -20,6 +25,7 @@
 
 
 
-#endif
+#endif /* #ifndef __MINGW32 */
 
+#endif /* #ifdef _WIN32 */
 #endif /* LCWIN32_H_ */
