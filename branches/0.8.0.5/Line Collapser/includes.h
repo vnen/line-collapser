@@ -21,6 +21,10 @@ namespace line_collapser
 #define LC_SOUND_FORMAT			MIX_DEFAULT_FORMAT
 #define LC_SOUND_CHANNELS		2
 #define LC_SOUND_CHUNKSIZE		4096
+#define LC_SOUND_FX_AMMOUNT		1
+
+//Sound FX
+#define LC_SOUND_FX_COLLAPSE	1
 
 //Frames per second
 #define LC_GAME_FPS  60
@@ -90,7 +94,8 @@ extern SDL_Surface* screen;
 extern SDL_Surface* background;
 
 //Sounds
-extern Mix_Music* bgm;
+extern Mix_Music* sndBgm;
+extern Mix_Chunk* sndFX[LC_SOUND_FX_AMMOUNT];
 
 //Fonts
 extern TTF_Font* font;

@@ -58,7 +58,8 @@ SDL_Surface* screen = NULL;
 SDL_Surface* background = NULL;
 
 //Sounds
-Mix_Music* bgm = NULL;
+Mix_Music* sndBgm = NULL;
+Mix_Chunk* sndFX[LC_SOUND_FX_AMMOUNT];
 
 //Fonts
 TTF_Font* font = NULL;
@@ -125,17 +126,27 @@ bool load_files()
 	if (background == NULL)
 		{ return false; }
 
-	//Opens background image
-	bgm = Mix_LoadMUS ("sounds/mainbgm.ogg");
-	if (bgm == NULL)
-		{ return false; }
+	//Opens background music
+	sndBgm = Mix_LoadMUS ("sounds/mainbgm.ogg");
+	if (sndBgm == NULL)
+		{ return false; } // I could remove this, sounds aren't essential for game
+						  // But is a good thing for tests
 
+	//Opens sound effects
+	for (int i = 0; i < LC_SOUND_FX_AMMOUNT; i++)
+	{
+		sndFX[i] = NULL;
+		sndFX[i] = Mix_LoadWAV(strcat("sounds/", whichSound(i)));
+	}
+
+	//Opens font (for score, line and level)
 	font = TTF_OpenFont ("fonts/r-impresive_6.ttf", 16);
 
 	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
 	{
 		char tmp[21];
 		sprintf(tmp, "images/block (%d).png", i+1);
+		block_colors[i] = NULL;
 		block_colors[i] = load_image (tmp);
 		if (block_colors[i] == NULL)
 			{ return false; }
@@ -153,7 +164,13 @@ void end_app()
 	Mix_HaltMusic();
 
 	//Close the music
-	Mix_FreeMusic(bgm);
+	Mix_FreeMusic(sndBgm);
+
+	//Closes the sound FX
+	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
+	{
+		Mix_FreeChunk(sndFX[i]);
+	}
 
 	//Closes the font
 	TTF_CloseFont (font);
