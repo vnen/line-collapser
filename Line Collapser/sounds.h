@@ -30,6 +30,10 @@ bool playEffect(int effect);
 //Returns the playing state after the function runs
 int musicTogglePause();
 
+/* Find out the filename for the sound effect number
+ */
+char* whichSound(int fx);
+
 }//namespace
 
 #endif /* _LC_SOUNDS_H_ */
