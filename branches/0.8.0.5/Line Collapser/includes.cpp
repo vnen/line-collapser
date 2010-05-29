@@ -6,6 +6,7 @@
 
 //Standard libraries
 #include <string>
+#include <cstring>
 #include <cstdlib>
 #include <math.h>
 
@@ -136,7 +137,8 @@ bool load_files()
 	for (int i = 0; i < LC_SOUND_FX_AMMOUNT; i++)
 	{
 		sndFX[i] = NULL;
-		sndFX[i] = Mix_LoadWAV(strcat("sounds/", whichSound(i)));
+		char* tmp = strcat("sounds/", whichSound(i));
+		sndFX[i] = Mix_LoadWAV(tmp);
 	}
 
 	//Opens font (for score, line and level)
