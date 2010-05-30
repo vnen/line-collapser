@@ -347,7 +347,7 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 										/*****************Game functions*****************/
 										/************************************************/
 
-//Collapse a line from matriz
+//Collapse a line from matrix
 void collapse_line (int line)
 {
 	//Goes through the matrix from the line to top
@@ -430,16 +430,14 @@ int* check_lines()
 
 
 
-int tetraminos[6] = {0,0,0,0,0,2};
-int actnext = 0;
+
+
 //Generates a random tetramino (a number between 0 and 6)
 int get_next()
 {
 	//Returns a random number between 0 and 6
 	//It uses
-	//return (int) mt_random() % 7 ;
-
-	return tetraminos[(actnext++ % 6)];
+	return (int) mt_random() % 7 ;
 
 }//int get_next()
 
@@ -450,7 +448,7 @@ int get_next()
 
 
 //Pauses the game
-/** returns 'true' if the user wants to quit */
+/** returns 'true' if the user wants to quit game */
 bool lcpause()
 {
 	//No music when the game is paused

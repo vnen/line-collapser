@@ -6,8 +6,7 @@ namespace line_collapser
 
 Timer::Timer()
 {
-	this->ticksOnPause = 0;
-	this->ticksOnStart = 0;
+	this->ticks = 0;
 	this->paused = false;
 	this->started = false;
 }
@@ -27,11 +26,11 @@ int Timer::getTicks()
 {
 	if (this->isPaused())
 	{
-		return this->ticksOnPause;
+		return this->ticks;
 	}
 	else
 	{
-		return SDL_GetTicks() - this->ticksOnStart;
+		return SDL_GetTicks() - this->ticks;
 	}
 }
 
@@ -39,30 +38,15 @@ void Timer::start()
 {
 	this->started = true;
 	this->paused = false;
-	this->ticksOnStart = SDL_GetTicks();
+	this->ticks = SDL_GetTicks();
 }
 
 void Timer::togglePause()
 {
 	if (this->isStarted())
 	{
-		//Se tiver iniciado e ...
-		if (!this->isPaused())
-			//... nXo estiver pausado
-			//armazena os ticks e pausa o timer
-		{
-			this->paused = true;
-			this->ticksOnPause = SDL_GetTicks() - this->ticksOnStart;	//Acho que uma variXvel apenas X suficiente para armazenar os ticks
-																		//Como elas trocam entre si, posso usar a mesma e ainda facilita
-																		//o cXdigo da pausa/continuaXXo do timer
-		}
-		else
-			//... estiver pausado
-			//... trocas os ticks e continua com o timing
-		{
-			this->paused = false;
-			this->ticksOnStart = SDL_GetTicks() - this->ticksOnPause;
-		}
+		this->paused = !this->paused;
+		this->ticks = SDL_GetTicks() - this->ticks;
 	}
 }
 
@@ -70,8 +54,7 @@ void Timer::stop()
 {
 	this->started = false;
 	this->paused = false;
-	this->ticksOnStart = 0;
-	this->ticksOnPause = 0;
+	this->ticks = 0;
 }
 
 }
