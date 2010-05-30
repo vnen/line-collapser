@@ -96,6 +96,10 @@ extern SDL_Surface* background;
 //Sounds
 extern Mix_Music* sndBgm;
 
+//Music and FX enabled state
+extern bool music;
+extern bool soundFX;
+
 //Fonts
 extern TTF_Font* font;
 
@@ -122,14 +126,17 @@ extern SDL_Event eventQ;
 ///****************Basic*****************///
 ///**************************************///
 
-//Inicializa o sistema
+//Initializes the system
 int init();
 
-//Carrega os arquivos necessrios
+//Loads the necessaries files
 bool load_files();
 
-//Libera a memria e encerra o sistema
+//Frees memory and exit the system
 void end_app();
+
+//Frees memory and exit the system with a exit code
+void end_app(int code);
 
 
 

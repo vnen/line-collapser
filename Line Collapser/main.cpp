@@ -52,10 +52,6 @@ int main (int argc, char* args[])
 	//****** Data ******//
 	/********************/
 
-	//Music and FX enabled state
-	bool music = false;
-	bool soundFX = true;
-
 	//If it is the first iteration
 	bool first = true;
 	
@@ -131,6 +127,10 @@ int main (int argc, char* args[])
 				}
 
 				//If user press 'F1', shows help screen
+				if(eventQ.key.keysym.sym == SDLK_F1)
+				{
+					showHelp();
+				}
 
 				//If the left arrow key was pressed, set the flag
 				if(eventQ.key.keysym.sym == SDLK_LEFT)
@@ -167,6 +167,12 @@ int main (int argc, char* args[])
 						int tmp = Mix_PlayMusic (sndBgm, -1);
 						if(tmp != -1) music = true;
 					}
+				}
+				
+				//If the 'F' key was pressed, enable/disable sound FX
+				if (eventQ.key.keysym.sym == SDLK_f)
+				{
+					soundFX = !soundFX;
 				}
 
 				//If the space bar was pressed, pause
@@ -292,7 +298,8 @@ int main (int argc, char* args[])
 				else //it can't move down anymore
 				{
 					//Plays effect
-					playEffect(LC_SOUND_FX_LAND);
+					if(soundFX)
+						playEffect(LC_SOUND_FX_LAND);
 
 					//Stops the timer
 					bottom.stop();
