@@ -1,11 +1,15 @@
-///Last update: 2010/05/30 12:55 (BRT)
+///Last update: 2010/05/30 14:20 (BRT)
 
-***************************************************
-* For now, part of the notes and comments are in  *
-* brazilian portuguese.                           *
-* I know english poorly, but I'll translate the   *
-* notes and comments... I already started...      *
-***************************************************
+**********NOTE:::
+I'm officially stopping this project
+It get on I wanted to fro
+Maybe I'll remake this and then will be a lot easier to add features
+But it's all messed up and change something is becoming more and more harder to do
+I want to study OpenGL, but the graphical part of this is too much tied to change everything
+
+If someone wants to improve this project, just let me know (it's open source)
+mail at georgemarques . com
+
 
 ***************************************************
 * This file contains the list of known bugs, some *
@@ -27,9 +31,13 @@
 
 - Arrow keys: move tetriminos
 
-- Space bar:  
+- Z: rotate tetriminos counter-clockwise
 
-rotate tetriminos counter-clockwise
+- M: plays/stops music
+
+- F: enable/disable sound FX
+
+- Space bar: pause
 
 - Esc: Quit
 
@@ -39,10 +47,12 @@ rotate tetriminos counter-clockwise
 *                                                 *
 ***************************************************
 
-- 0.8.0.5
+- 0.9.1
 	- pause function
 	- background music and sound effects (poor, but working)
 	- help screen
+	- start screen
+	- at least for now, this project is over :(
 
 - 0.8.0.4
 	- added a fix to the 'Flying tetraminos' bug
@@ -68,7 +78,7 @@ rotate tetriminos counter-clockwise
 
 - Flying tetramino 2: this is really hard to notice!
 	When there is a line collapsing, if the tetramino which fill the line was an 'I', if you try to rotate the 'I' will be
-	pinned on top of screen.
+	pinned on top of screen. (fixed 0.9.1)
 
 
 - Sometimes, rotation doesn't work or it's done twice (maybe a problem with event handler?) (I can't reproduce that anymore)
@@ -98,7 +108,7 @@ rotate tetriminos counter-clockwise
 
 - Store High Scores
 
-- Pause function (added 0.8.0.5)
+- Pause function (added 0.8.9.1)
 
 - Random Tetraminos (added 0.8.0.4)
 

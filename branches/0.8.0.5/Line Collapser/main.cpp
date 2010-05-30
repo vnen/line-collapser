@@ -204,7 +204,9 @@ int main (int argc, char* args[])
 				//If the 'Z' key was pressed, rotate (counter-clockwise)
 				if (eventQ.key.keysym.sym == SDLK_z)
 				{
-					tetras[actual]->rotate();
+					//No rotate when collapsing
+					if(!collapsing)
+						tetras[actual]->rotate();
 				}
 
 				//If the 'M' key was pressed, stops/plays music

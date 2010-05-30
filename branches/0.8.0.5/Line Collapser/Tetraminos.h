@@ -16,7 +16,7 @@ namespace line_collapser
 		I();
 		void draw_in_next();
 		void reset();
-	}; //class Line
+	}; //class I
 
 /********************************************************/
 /************************** O ***************************/
@@ -28,7 +28,7 @@ namespace line_collapser
 		O();
 		void draw_in_next();
 		void reset();
-	}; //class Square
+	}; //class O
 
 /********************************************************/
 /************************** L ***************************/
@@ -52,7 +52,7 @@ namespace line_collapser
 		J();
 		void draw_in_next();
 		void reset();
-	}; //class ReverseL
+	}; //class J
 
 /********************************************************/
 /************************** S ***************************/
@@ -76,7 +76,7 @@ namespace line_collapser
 		Z();
 		void draw_in_next();
 		void reset();
-	}; //class ReverseS
+	}; //class Z
 
 /********************************************************/
 /************************** T ***************************/
