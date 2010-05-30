@@ -56,13 +56,14 @@ SDL_Surface* screen = NULL;
 
 //Images
 SDL_Surface* background = NULL;
+SDL_Surface* startscreen = NULL;
 
 //Sounds
 Mix_Music* sndBgm = NULL;
 
 //Music and FX enabled state
-bool music = true;
-bool soundFX = true;
+bool music = false;
+bool soundFX = false;
 
 //Fonts
 TTF_Font* font = NULL;
@@ -124,6 +125,11 @@ int init()
 //Loads the necessaries files
 bool load_files()
 {
+	//Opens start screen image
+	startscreen = load_image ("images/start.png");
+	if (startscreen == NULL)
+		{ return false; }
+
 	//Opens background image
 	background = load_image ("images/background.png");
 	if (background == NULL)
@@ -424,13 +430,16 @@ int* check_lines()
 
 
 
-
+int tetraminos[6] = {0,0,0,0,0,2};
+int actnext = 0;
 //Generates a random tetramino (a number between 0 and 6)
 int get_next()
 {
 	//Returns a random number between 0 and 6
 	//It uses
-	return (int) mt_random() % 7 ;
+	//return (int) mt_random() % 7 ;
+
+	return tetraminos[(actnext++ % 6)];
 
 }//int get_next()
 
@@ -446,6 +455,29 @@ bool lcpause()
 {
 	//No music when the game is paused
 	int musicState = musicTogglePause();
+
+	//Updates screen
+	//Applies the background
+	apply_surface(0, 0, background, screen);
+
+	//Writes the score
+	print_score (score);
+
+	//Writes the amount of lines collapsed
+	print_line (line);
+
+	//Writes the actual level
+	print_level (level);
+
+	//Puts the matrix on screen
+	paint_matrix();
+
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		return true;
+	}
+
 
 	//Makes a backup of game_matrix
 	lcBlockColor matrix_backup[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH];
@@ -474,15 +506,6 @@ bool lcpause()
 		SDL_Delay(20);
 
 	}//for (each column)
-
-	//Puts the matrix on screen
-	paint_matrix();
-
-	//Updates the screen and check against errors
-	if (SDL_Flip(screen) == -1)
-	{
-		return true;
-	}
 
 
 	//If the user wants to quit while paused
@@ -533,13 +556,51 @@ bool lcpause()
 				//If the user pressed the F1 key, shows help
 				if (eventQ.key.keysym.sym == SDLK_F1)
 				{
+
 					showHelp();
+
+					//The screen was changed, so we have to do this again:
+					//Applies the background
+					apply_surface(0, 0, background, screen);
+
+					//Writes the score
+					print_score (score);
+
+					//Writes the amount of lines collapsed
+					print_line (line);
+
+					//Writes the actual level
+					print_level (level);
+
+					//Puts the matrix on screen
+					paint_matrix();
+
+					//Updates the screen and check against errors
+					if (SDL_Flip(screen) == -1)
+					{
+						quit = true;
+					}
+					//Puts the matrix on screen
+					paint_matrix();
+
+					//Updates the screen and check against errors
+					if (SDL_Flip(screen) == -1)
+					{
+						return true;
+					}
+
 				}
 
 				//If the 'F' key was pressed, enable/disable sound FX
 				if (eventQ.key.keysym.sym == SDLK_f)
 				{
 					soundFX = !soundFX;
+				}
+
+				//If the 'M' key was pressed, enable/disable music
+				if (eventQ.key.keysym.sym == SDLK_m)
+				{
+					music = !music;
 				}
 
 				break;
@@ -565,10 +626,12 @@ bool lcpause()
 	}//for (each column)
 
 	//Now we turn on the music again... if it is paused
-	if (musicState == LC_MUSIC_PAUSED)
+	if (musicState == LC_MUSIC_PAUSED && music)
 		musicTogglePause();
+
 	return quit;
 }
+
 
 
 
