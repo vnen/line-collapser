@@ -7,6 +7,7 @@
 
 #include "includes.h"
 #include "sounds.h"
+#include <string>
 
 namespace line_collapser
 {
@@ -64,19 +65,32 @@ int musicTogglePause()
 
 
 
-
-/* Find out the filename for the sound effect number
- */
-char* whichSound(int fx)
+//Plays a specific sound effect (of the list made on "includes.h")
+void playEffect(int effect)
 {
-	switch (fx)
+	Mix_Chunk* sndFX = NULL;
+
+	//Loads sound file based on selected effect
+	switch (effect)
 	{
-	case 0:
-		return "collapse.ogg";
+	case LC_SOUND_FX_COLLAPSE:
+		sndFX = Mix_LoadWAV("sounds/collapse.ogg");
 		break;
+
+	case LC_SOUND_FX_LAND:
+		sndFX = Mix_LoadWAV("sounds/land.ogg");
+		break;
+
 	default:
-		return "error";
-	}
-} // char* whichSound(int fx)
+		return;
+		break;
+
+	} //switch (effect)
+
+	if (sndFX != NULL)
+		//Plays effect if it was loaded
+		Mix_PlayChannel(-1, sndFX, 0);
+
+} //void playEffect(int effect)
 
 }//namespace

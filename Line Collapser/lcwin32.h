@@ -21,7 +21,7 @@
 /* Use 'sprintf_s()' instead of 'sprintf()' when compiled on Windows
  * (removes the warnings)
  */
-#define sprintf sprintf_s
+#define sprintf		sprintf_s
 
 
 
