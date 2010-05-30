@@ -60,6 +60,10 @@ SDL_Surface* background = NULL;
 //Sounds
 Mix_Music* sndBgm = NULL;
 
+//Music and FX enabled state
+bool music = true;
+bool soundFX = true;
+
 //Fonts
 TTF_Font* font = NULL;
 
@@ -153,6 +157,12 @@ bool load_files()
 //Frees the memory and closes system
 void end_app()
 {
+	end_app(0);
+} //void end_app(int code)
+
+//Frees memory and exit the system with a exit code
+void end_app(int code)
+{
 	//Stops all sounds
 	Mix_HaltMusic();
 	Mix_HaltChannel(-1);
@@ -176,7 +186,10 @@ void end_app()
 	Mix_CloseAudio();
 	TTF_Quit ();
 	SDL_Quit ();
-}
+
+	exit(code);
+} //void end_app(int code)
+
 
 
 											/************************************************/
@@ -517,6 +530,18 @@ bool lcpause()
 					pause = false;
 				}
 
+				//If the user pressed the F1 key, shows help
+				if (eventQ.key.keysym.sym == SDLK_F1)
+				{
+					showHelp();
+				}
+
+				//If the 'F' key was pressed, enable/disable sound FX
+				if (eventQ.key.keysym.sym == SDLK_f)
+				{
+					soundFX = !soundFX;
+				}
+
 				break;
 			}//switch events
 		}//while events
@@ -557,19 +582,20 @@ void showHelp()
 	Timer fpscap;
 
 	//Loads the image
-	SDL_Surface* img = load_image("images/help.png");
+	SDL_Surface* img = NULL;
+	img = load_image("images/help.png");
 
 	//Check if image was loaded fine
 	if (img == NULL)
-		end_app();
+		end_app(70);
 
 	//Applies image
-	apply_surface(0, 0, img, screen, NULL);
+	apply_surface(0, 0, img, screen);
 
 	//Updates the screen and check against errors
 	if (SDL_Flip(screen) == -1)
 	{
-		end_app();
+		end_app(71);
 	}
 
 	bool quit = false;
@@ -607,6 +633,27 @@ void showHelp()
 				if (eventQ.key.keysym.sym == SDLK_F1)
 				{
 					quit = true;
+				}
+
+				//If the 'M' key was pressed, stops/plays music
+				if (eventQ.key.keysym.sym == SDLK_m)
+				{
+					if(music)
+					{
+						Mix_HaltMusic();
+						music = false;
+					}
+					else
+					{
+						int tmp = Mix_PlayMusic (sndBgm, -1);
+						if(tmp != -1) music = true;
+					}
+				}
+
+				//If the 'F' key was pressed, enable/disable sound FX
+				if (eventQ.key.keysym.sym == SDLK_f)
+				{
+					soundFX = !soundFX;
 				}
 
 			}//events switch
