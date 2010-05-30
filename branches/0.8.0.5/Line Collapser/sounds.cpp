@@ -64,11 +64,13 @@ int musicTogglePause()
 
 
 
+Mix_Chunk* sndFX = NULL;
 
 //Plays a specific sound effect (of the list made on "includes.h")
 void playEffect(int effect)
 {
-	Mix_Chunk* sndFX = NULL;
+	//Frees the file
+	Mix_FreeChunk(sndFX);
 
 	//Loads sound file based on selected effect
 	switch (effect)
@@ -92,8 +94,6 @@ void playEffect(int effect)
 		//Plays effect if it was loaded
 		Mix_PlayChannel(-1, sndFX, 0);
 
-		//And frees the file
-		Mix_FreeChunk(sndFX);
 	}
 
 } //void playEffect(int effect)
