@@ -8,8 +8,7 @@ class Timer
 {
 
 private:
-	int ticksOnStart;
-	int ticksOnPause;
+	int ticks;
 
 	bool started;
 	bool paused;
@@ -17,8 +16,8 @@ private:
 public:
 	Timer();
 
-	void start(); //Inicia o timer
-	void togglePause(); //Pausa/despausa o Timer
+	void start();
+	void togglePause();
 	void stop();
 
 	int getTicks();

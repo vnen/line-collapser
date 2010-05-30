@@ -30,19 +30,22 @@ namespace line_collapser
 
 	void I::reset()
 	{
-		//Zera a matriz
+		//Empties the matrix
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
+		//Resets position
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+		//Resets orientation
 		this->matrix[1][0] = 1;
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
+
+		//Set as reseted
+		this->reseted = true;
 
 	}//void I::reset()
 
@@ -72,21 +75,18 @@ namespace line_collapser
 
 	void O::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[2][1] = 1;
 		this->matrix[2][2] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void O::reset()
@@ -117,21 +117,18 @@ namespace line_collapser
 
 	void L::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][1] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void L::reset()
@@ -162,21 +159,18 @@ namespace line_collapser
 
 	void J::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][3] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void J::reset()
@@ -207,21 +201,18 @@ namespace line_collapser
 
 	void S::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][1] = 1;
 		this->matrix[2][2] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void S::reset()
@@ -252,21 +243,18 @@ namespace line_collapser
 
 	void Z::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[2][2] = 1;
 		this->matrix[2][3] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void Z::reset()
@@ -297,21 +285,18 @@ namespace line_collapser
 
 	void T::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][2] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void T::reset()

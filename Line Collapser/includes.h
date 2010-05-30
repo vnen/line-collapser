@@ -161,35 +161,34 @@ void insert_block (int x, int y, lcBlockColor color = NONE);
 //Insert a block in next box (with x,y relative to the interior of the box)
 void insert_next (int x, int y, lcBlockColor color);
 
-//Desenha a pontuao
+//Draws score
 void print_score (int scoreNum);
 
-//Desenha a quantidade de linhas
+//Draws the number of lines collapsed
 void print_line (int lineNum);
 
-//Desenha o nvel
+//Draws the level
 void print_level (int levelNum);
 
-//Desenha a matriz
+//Draws the matrix
 void paint_matrix ();
 
 /************************************************/
 /******************Game Functions****************/
 /************************************************/
 
-//Retira uma linha da matriz
+//Collapse a line from matrix
 void collapse_line (int line);
 
-//Checa por linhas completas e retorna um vetor no formato:
-//{ qtd de linhas, linha 1, linha 2, linha 3, linha 4 }
+//Checks for full lines and returns a vector in the format:
+//{ ammount of lines, line 1, line 2, line 3, line 4 }
 int* check_lines();
 
-//Gera um tetramino aleatrio
-//(poderia usar direto a funo 'random()', mas aqui posso usar um seed diferente sem comprometer o cdigo)
+//Generates a random tetramino (a number between 0 and 6)
 int get_next();
 
 //Pauses the game
-/** returns 'true' if the user wants to quit */
+/** returns 'true' if the user wants to quit game */
 bool lcpause();
 
 //Shows help screen
