@@ -20,11 +20,11 @@ namespace line_collapser
 #define LC_SOUND_SAMPLERATE		22500
 #define LC_SOUND_FORMAT			MIX_DEFAULT_FORMAT
 #define LC_SOUND_CHANNELS		2
-#define LC_SOUND_CHUNKSIZE		4096
-#define LC_SOUND_FX_AMMOUNT		1
+#define LC_SOUND_CHUNKSIZE		512
 
 //Sound FX
 #define LC_SOUND_FX_COLLAPSE	1
+#define LC_SOUND_FX_LAND		2
 
 //Frames per second
 #define LC_GAME_FPS  60
@@ -95,7 +95,6 @@ extern SDL_Surface* background;
 
 //Sounds
 extern Mix_Music* sndBgm;
-extern Mix_Chunk* sndFX[LC_SOUND_FX_AMMOUNT];
 
 //Fonts
 extern TTF_Font* font;
@@ -166,7 +165,7 @@ void print_level (int levelNum);
 void paint_matrix ();
 
 /************************************************/
-/******************Event Handle******************/
+/**********************Events********************/
 /************************************************/
 
 //Retira uma linha da matriz
@@ -183,6 +182,9 @@ int get_next();
 //Pauses the game
 /** returns 'true' if the user wants to quit */
 bool lcpause();
+
+//Shows help screen
+void showHelp();
 
 
 }//namespace

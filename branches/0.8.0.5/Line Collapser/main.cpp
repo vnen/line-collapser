@@ -9,6 +9,7 @@
 
 int main (int argc, char* args[])
 {
+	int teste = 0;
 	//Standard namespace
 	using namespace line_collapser;
 	
@@ -53,7 +54,7 @@ int main (int argc, char* args[])
 	/********************/
 
 	//Music and FX enabled state
-	bool music = true;
+	bool music = false;
 	bool soundFX = true;
 
 	//If it is the first iteration
@@ -150,6 +151,21 @@ int main (int argc, char* args[])
 				if (eventQ.key.keysym.sym == SDLK_z)
 				{
 					tetras[actual]->rotate();
+				}
+
+				//If the 'M' key was pressed, stops/plays music
+				if (eventQ.key.keysym.sym == SDLK_m)
+				{
+					if(music)
+					{
+						Mix_HaltMusic();
+						music = false;
+					}
+					else
+					{
+						int tmp = Mix_PlayMusic (sndBgm, -1);
+						if(tmp != -1) music = true;
+					}
 				}
 
 				//If the space bar was pressed, pause
@@ -274,6 +290,9 @@ int main (int argc, char* args[])
 				//If it isn't possible, so the tetramino must finally land
 				else //it can't move down anymore
 				{
+					//Plays effect sooner as possible, because it seems that SDL_mixer have some delay on playing sounds
+					playEffect(LC_SOUND_FX_LAND);
+
 					//Stops the timer
 					bottom.stop();
 
@@ -341,8 +360,8 @@ int main (int argc, char* args[])
 
 						//Plays the sound effect
 						if(soundFX)
-							if(sndFX[LC_SOUND_FX_COLLAPSE] != NULL)
-							Mix_PlayChannel(-1, sndFX[LC_SOUND_FX_COLLAPSE], 0);
+							playEffect(LC_SOUND_FX_COLLAPSE);
+
 					}//if (collapsing)
 
 					//If there's no needing to collapse lines
@@ -350,7 +369,7 @@ int main (int argc, char* args[])
 					{
 						//The next Tetramino now is the actual
 						actual = next;
-						//The next Tetramino is generated "randomly" (It isn't randomly to make tests easier)
+						//The next Tetramino is generated randomly
 						next = get_next();
 
 						//Try to put the next Tetramino on the matrix
@@ -431,7 +450,7 @@ int main (int argc, char* args[])
 					//The next Tetramino now is the actual
 					actual = next;
 
-					//The next Tetramino is generated "randomly"
+					//The next Tetramino is generated randomly
 					next = get_next();
 
 					//If it isn't possible, game over

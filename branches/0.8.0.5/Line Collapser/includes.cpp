@@ -6,7 +6,6 @@
 
 //Standard libraries
 #include <string>
-#include <cstring>
 #include <cstdlib>
 #include <math.h>
 
@@ -60,7 +59,6 @@ SDL_Surface* background = NULL;
 
 //Sounds
 Mix_Music* sndBgm = NULL;
-Mix_Chunk* sndFX[LC_SOUND_FX_AMMOUNT];
 
 //Fonts
 TTF_Font* font = NULL;
@@ -133,14 +131,7 @@ bool load_files()
 		{ return false; } // I could remove this, sounds aren't essential for game
 						  // But is a good thing for tests
 
-	//Opens sound effects
-	for (int i = 0; i < LC_SOUND_FX_AMMOUNT; i++)
-	{
-		sndFX[i] = NULL;
-		char* tmp = strcat("sounds/", whichSound(i));
-		sndFX[i] = Mix_LoadWAV(tmp);
-	}
-
+	
 	//Opens font (for score, line and level)
 	font = TTF_OpenFont ("fonts/r-impresive_6.ttf", 16);
 
@@ -162,17 +153,12 @@ bool load_files()
 //Frees the memory and closes system
 void end_app()
 {
-	//Stops the music
+	//Stops all sounds
 	Mix_HaltMusic();
+	Mix_HaltChannel(-1);
 
 	//Close the music
 	Mix_FreeMusic(sndBgm);
-
-	//Closes the sound FX
-	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
-	{
-		Mix_FreeChunk(sndFX[i]);
-	}
 
 	//Closes the font
 	TTF_CloseFont (font);
