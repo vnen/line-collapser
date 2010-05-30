@@ -83,6 +83,10 @@ int main (int argc, char* args[])
 	bool moving_left = false;
 	bool moving_right = false;
 
+	//Play the start screen bgm
+	bool playingBgm = false;
+	playingBgm = playStartBgm();
+
 	//Shows start screen
 	apply_surface(0, 0, startscreen, screen);
 	//Updates the screen and check against errors
@@ -106,7 +110,7 @@ int main (int argc, char* args[])
 			//If the user try to close the window
 			case SDL_QUIT:
 				//Sets the flag to quit the main loop
-				quit = true;
+				end_app();
 				break;
 			//If the user has pressed a key
 			case SDL_KEYDOWN:
@@ -138,12 +142,14 @@ int main (int argc, char* args[])
 
 
 	//Before start the main loop, start playing the background music
-	bool playingBgm = false;
 	if (music)
 		playingBgm = line_collapser::playMainBgm();
 
 	//To avoid warnings when it is still not used
 	playingBgm = playingBgm;
+
+	//Frees memory used by start screen bgm
+	Mix_FreeMusic (sndStartBgm);
 
 
 	//Main loop

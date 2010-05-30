@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,8,0,3
- PRODUCTVERSION 0,8,0,3
+ FILEVERSION 0,9,1,0
+ PRODUCTVERSION 0,9,1,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -71,11 +71,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "CCC Apps"
             VALUE "FileDescription", "Line Collapser"
-            VALUE "FileVersion", "0, 8, 0, 3"
+            VALUE "FileVersion", "0, 9, 1, 0"
             VALUE "InternalName", "Line"
             VALUE "OriginalFilename", "Line Collapser.exe"
             VALUE "ProductName", "Line Collapser"
-            VALUE "ProductVersion", "0, 8, 0, 3"
+            VALUE "ProductVersion", "0, 9, 1, 0"
         END
     END
     BLOCK "VarFileInfo"
@@ -84,13 +84,6 @@ BEGIN
     END
 END
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_BITMAP1             BITMAP                  "C:\\Users\\George\\Workspace\\Visual Studio 2008\\Projects\\Line Collapser\\Design\\Images\\Line Collapser - Blue Block.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

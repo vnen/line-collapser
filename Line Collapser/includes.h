@@ -97,6 +97,7 @@ extern SDL_Surface* startscreen;
 
 //Sounds
 extern Mix_Music* sndBgm;
+extern Mix_Music* sndStartBgm;
 
 //Music and FX enabled state
 extern bool music;
