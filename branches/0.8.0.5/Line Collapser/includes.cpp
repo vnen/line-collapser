@@ -60,10 +60,11 @@ SDL_Surface* startscreen = NULL;
 
 //Sounds
 Mix_Music* sndBgm = NULL;
+Mix_Music* sndStartBgm = NULL;
 
 //Music and FX enabled state
-bool music = false;
-bool soundFX = false;
+bool music = true;
+bool soundFX = true;
 
 //Fonts
 TTF_Font* font = NULL;
@@ -137,9 +138,9 @@ bool load_files()
 
 	//Opens background music
 	sndBgm = Mix_LoadMUS ("sounds/mainbgm.ogg");
-	if (sndBgm == NULL)
-		{ return false; } // I could remove this, sounds aren't essential for game
-						  // But is a good thing for tests
+
+	//Opens background music for start screen
+	sndStartBgm = Mix_LoadMUS ("sounds/startbgm.ogg");
 
 	
 	//Opens font (for score, line and level)
