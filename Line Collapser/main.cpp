@@ -357,9 +357,6 @@ int main (int argc, char* args[])
 					//Stops the timer
 					bottom.stop();
 
-					//Resets the actual tetramino
-					tetras[actual]->reset();
-
 					//Checks for full lines
 					fullLines = check_lines();
 
@@ -428,6 +425,9 @@ int main (int argc, char* args[])
 					//If there's no needing to collapse lines
 					else
 					{
+						//Resets the actual tetramino
+						tetras[actual]->reset();
+
 						//The next Tetramino now is the actual
 						actual = next;
 						//The next Tetramino is generated randomly
@@ -507,6 +507,9 @@ int main (int argc, char* args[])
 
 					//We're not collapsing lines anymore
 					collapsing = false;
+
+					//Resets the actual tetramino
+					tetras[actual]->reset();
 
 					//The next Tetramino now is the actual
 					actual = next;
