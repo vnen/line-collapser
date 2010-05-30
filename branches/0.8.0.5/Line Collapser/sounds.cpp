@@ -113,4 +113,23 @@ void playEffect(int effect)
 
 } //void playEffect(int effect)
 
+
+
+
+
+//Plays the start screen's bgm
+bool playStartBgm()
+{
+	//If there isn't a bgm loaded
+	if (sndStartBgm == NULL)
+		{ return false; } //Returns a error
+
+	//Plays the bgm forever
+	//And checks for error
+	if (Mix_PlayMusic(sndStartBgm, -1) == -1)
+		{ return false; }
+
+	return true;
+
+}//bool playStartBgm()
 }//namespace
