@@ -83,6 +83,59 @@ int main (int argc, char* args[])
 	bool moving_left = false;
 	bool moving_right = false;
 
+	//Shows start screen
+	apply_surface(0, 0, startscreen, screen);
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		end_app();
+	}
+
+	//Makes a loop like the main to handle events
+	bool quit = false;
+	while (!quit)
+	{
+		fpscap.start();
+
+		//Handle all the generated events
+		while (SDL_PollEvent (&eventQ))
+		{
+			//Captures the type of event
+			switch (eventQ.type)
+			{
+			//If the user try to close the window
+			case SDL_QUIT:
+				//Sets the flag to quit the main loop
+				quit = true;
+				break;
+			//If the user has pressed a key
+			case SDL_KEYDOWN:
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
+				{
+					end_app();									//Sets the flag to quit the main loop
+				}
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
+				{
+					end_app();								//Sets the flag to quit the main loop
+				}
+
+				//If user press space bar, starts the game
+				if(eventQ.key.keysym.sym == SDLK_SPACE)
+				{
+					quit = true;
+				}
+			}//events switch
+		}//events while
+
+		//Keep the frame rate
+		if (fpscap.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fpscap.getTicks());
+	}//start screen loop
+
 
 	//Before start the main loop, start playing the background music
 	bool playingBgm = false;
@@ -94,7 +147,7 @@ int main (int argc, char* args[])
 
 
 	//Main loop
-	bool quit = false;
+	quit = false;
 	while (!quit)
 	{
 		fpscap.start();
@@ -415,7 +468,7 @@ int main (int argc, char* args[])
 							(counting > (6*LC_GAME_FPS/10) && counting <= (7*LC_GAME_FPS/10)) ||
 							(counting > (8*LC_GAME_FPS/10) && counting <= (9*LC_GAME_FPS/10)))
 					//Hides
-					//This function is almost identical to the backuo function, but it erases instead copy
+					//This function is almost identical to the backup function, but it erases instead copy
 					for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)

@@ -23,6 +23,7 @@ namespace line_collapser
 #define LC_SOUND_CHUNKSIZE		512
 
 //Sound FX
+#define LC_SOUND_FX_NONE		0
 #define LC_SOUND_FX_COLLAPSE	1
 #define LC_SOUND_FX_LAND		2
 
@@ -92,6 +93,7 @@ extern SDL_Surface* screen;
 
 //Images
 extern SDL_Surface* background;
+extern SDL_Surface* startscreen;
 
 //Sounds
 extern Mix_Music* sndBgm;
@@ -153,10 +155,10 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 /**************Especific Drawing*****************/
 /************************************************/
 
-//Insere um bloco de acordo com a matriz
+//Insert a block, according to the matrix
 void insert_block (int x, int y, lcBlockColor color = NONE);
 
-//Insere um bloco na caixa next (com x,y relativo ao interior da caixa)
+//Insert a block in next box (with x,y relative to the interior of the box)
 void insert_next (int x, int y, lcBlockColor color);
 
 //Desenha a pontuao

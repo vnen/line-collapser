@@ -65,10 +65,18 @@ int musicTogglePause()
 
 
 Mix_Chunk* sndFX = NULL;
+int whichEffect = LC_SOUND_FX_NONE;
 
 //Plays a specific sound effect (of the list made on "includes.h")
 void playEffect(int effect)
 {
+	//If the sound is already loaded, we don't need to load it again
+	if (whichEffect == effect && effect != LC_SOUND_FX_NONE)
+	{
+		Mix_PlayChannel(-1, sndFX, 0);
+		return;
+	}
+
 	//Frees the file
 	Mix_FreeChunk(sndFX);
 
@@ -91,9 +99,16 @@ void playEffect(int effect)
 
 	if (sndFX != NULL)
 	{
+		//Stores which effect is already loaded
+		whichEffect = effect;
+
 		//Plays effect if it was loaded
 		Mix_PlayChannel(-1, sndFX, 0);
-
+	}
+	else
+	{
+		//Nothing is loaded
+		whichEffect = LC_SOUND_FX_NONE;
 	}
 
 } //void playEffect(int effect)
