@@ -1,4 +1,4 @@
-///Last update: 2010/05/25 22:33 (UTC)
+///Last update: 2010/05/30 12:55 (BRT)
 
 ***************************************************
 * For now, part of the notes and comments are in  *
@@ -42,7 +42,7 @@ rotate tetriminos counter-clockwise
 - 0.8.0.5
 	- pause function
 	- background music and sound effects (poor, but working)
-	- help screen (working on it)
+	- help screen
 
 - 0.8.0.4
 	- added a fix to the 'Flying tetraminos' bug
@@ -66,7 +66,10 @@ rotate tetriminos counter-clockwise
 *                                                 *
 ***************************************************
 
-- It seems like I fixed everyone I noticed xD
+- Flying tetramino 2: this is really hard to notice!
+	When there is a line collapsing, if the tetramino which fill the line was an 'I', if you try to rotate the 'I' will be
+	pinned on top of screen.
+
 
 - Sometimes, rotation doesn't work or it's done twice (maybe a problem with event handler?) (I can't reproduce that anymore)
 
@@ -90,7 +93,6 @@ rotate tetriminos counter-clockwise
 - Make an icon (a decent one)
 
 - Make a game over screen, with an option to play again
-	- **** I'll make this before make the initial/final screens ****
 	
 - Initial and final screens
 
