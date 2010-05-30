@@ -88,8 +88,13 @@ void playEffect(int effect)
 	} //switch (effect)
 
 	if (sndFX != NULL)
+	{
 		//Plays effect if it was loaded
 		Mix_PlayChannel(-1, sndFX, 0);
+
+		//And frees the file
+		Mix_FreeChunk(sndFX);
+	}
 
 } //void playEffect(int effect)
 

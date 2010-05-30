@@ -23,9 +23,13 @@
 
 - Com'on it's Tetris!
 
+- F1: game help
+
 - Arrow keys: move tetriminos
 
-- Space bar: rotate tetriminos counter-clockwise
+- Space bar:  
+
+rotate tetriminos counter-clockwise
 
 - Esc: Quit
 
@@ -34,6 +38,11 @@
 *                    Changes                      *
 *                                                 *
 ***************************************************
+
+- 0.8.0.5
+	- pause function
+	- background music and sound effects (poor, but working)
+	- help screen (working on it)
 
 - 0.8.0.4
 	- added a fix to the 'Flying tetraminos' bug
@@ -75,25 +84,25 @@
 *                                                 *
 ***************************************************
 
-- Random Tetraminos (added 0.8.0.4)
-
-- Initial and final screens
-
 - Add sound (it is harder to make the sound than make it runs)
 	- this is probably the next thing I'll do, because I think it'll really improve the gameplay
-
+	
 - Make an icon (a decent one)
+
+- Make a game over screen, with an option to play again
+	- **** I'll make this before make the initial/final screens ****
+	
+- Initial and final screens
+
+- Store High Scores
+
+- Pause function (added 0.8.0.5)
+
+- Random Tetraminos (added 0.8.0.4)
 
 - Make the moving frame rate independent (looking better, I think it isn't really needed)
 	- It is based on FPS, but a change on GAME_FPS value doesn't change the speed of game
 	- (since a change on version 0.8.0.4)
-
-- Make a game over screen, with an option to play again
-	- **** I'll make this before make the initial/final screens ****
-
-- Store High Scores
-
-- Pause function
 
 
 ***************************************************
