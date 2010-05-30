@@ -23,16 +23,12 @@ bool playMainBgm();
 //Plays the start screen's bgm
 bool playStartBgm();
 
-//Plays a specific sound effect (of the list I'll make when I have the sound)
-bool playEffect(int effect);
+//Plays a specific sound effect (of the list made on "includes.h")
+void playEffect(int effect);
 
 //Pauses music
 //Returns the playing state after the function runs
 int musicTogglePause();
-
-/* Find out the filename for the sound effect number
- */
-char* whichSound(int fx);
 
 }//namespace
 
