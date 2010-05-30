@@ -547,4 +547,80 @@ bool lcpause()
 
 
 
+
+
+
+
+//Shows help screen
+void showHelp()
+{
+	Timer fpscap;
+
+	//Loads the image
+	SDL_Surface* img = load_image("images/help.png");
+
+	//Check if image was loaded fine
+	if (img == NULL)
+		end_app();
+
+	//Applies image
+	apply_surface(0, 0, img, screen, NULL);
+
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		end_app();
+	}
+
+	bool quit = false;
+	while (!quit)
+	{
+		fpscap.start();
+
+		//Handle all the generated events
+		while (SDL_PollEvent (&eventQ))
+		{
+			//Captures the type of event
+			switch (eventQ.type)
+			{
+			//If the user try to close the window
+			case SDL_QUIT:
+				//Exit the game
+				SDL_FreeSurface(img);
+				end_app();
+				break;
+			//If the user has pressed a key
+			case SDL_KEYDOWN:
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
+				{
+					end_app();
+				}
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
+				{
+					end_app();
+				}
+				//If user press 'F1', come back
+				if (eventQ.key.keysym.sym == SDLK_F1)
+				{
+					quit = true;
+				}
+
+			}//events switch
+		}//events loop
+
+		//Keep the frame rate
+		if (fpscap.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fpscap.getTicks());
+
+	} //main loop
+
+	SDL_FreeSurface(img);
+
+}//void showHelp()
+
+
 }//namespace

@@ -9,7 +9,6 @@
 
 int main (int argc, char* args[])
 {
-	int teste = 0;
 	//Standard namespace
 	using namespace line_collapser;
 	
@@ -130,6 +129,8 @@ int main (int argc, char* args[])
 				{
 					quit = true;								//Sets the flag to quit the main loop
 				}
+
+				//If user press 'F1', shows help screen
 
 				//If the left arrow key was pressed, set the flag
 				if(eventQ.key.keysym.sym == SDLK_LEFT)
@@ -290,7 +291,7 @@ int main (int argc, char* args[])
 				//If it isn't possible, so the tetramino must finally land
 				else //it can't move down anymore
 				{
-					//Plays effect sooner as possible, because it seems that SDL_mixer have some delay on playing sounds
+					//Plays effect
 					playEffect(LC_SOUND_FX_LAND);
 
 					//Stops the timer
