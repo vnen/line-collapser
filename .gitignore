@@ -2,3 +2,5 @@
 *.o
 *.d
 Line Collapser/linecollapser
+Debug
+Release
