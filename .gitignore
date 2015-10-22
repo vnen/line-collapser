@@ -6,3 +6,5 @@ Debug
 Release
 *.sdf
 *.opensdf
+.vs
+*.user
