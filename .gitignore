@@ -4,3 +4,5 @@
 Line Collapser/linecollapser
 Debug
 Release
+*.sdf
+*.opensdf

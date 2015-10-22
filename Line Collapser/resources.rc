@@ -92,7 +92,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "c:\\users\\george\\workspace\\visual studio 2008\\projects\\line collapser\\design\\images\\icon1.ico"
+IDI_ICON1               ICON                    "linecollapser.ico"
 #endif    // Portuguese (Brazil) resources
 /////////////////////////////////////////////////////////////////////////////
 
