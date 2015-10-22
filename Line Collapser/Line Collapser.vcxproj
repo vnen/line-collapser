@@ -71,36 +71,36 @@
     <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ReferencePath>$(ProjectDir)library\ref\x86;$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)\</OutDir>
     <IntDir>$(Configuration)\$(PlatformTarget)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)library\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)library\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)library\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <ReferencePath>$(ProjectDir)library\ref\x86;$(VC_ReferencesPath_x86);</ReferencePath>
+    <LibraryPath>$(ProjectDir)library\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)library\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)library\lib\x64;$(LibraryPath)</LibraryPath>
-    <ReferencePath>$(ProjectDir)library\ref\x64;$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)\</OutDir>
     <IntDir>$(Configuration)\$(PlatformTarget)\</IntDir>
+    <IncludePath>$(ProjectDir)library\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <ReferencePath>$(ProjectDir)library\ref\x64;$(VC_ReferencesPath_x64);</ReferencePath>
+    <LibraryPath>$(ProjectDir)library\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ReferencePath>$(ProjectDir)library\ref\x86;$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)\</OutDir>
     <IntDir>$(Configuration)\$(PlatformTarget)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)library\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)library\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)library\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <ReferencePath>$(ProjectDir)library\ref\x86;$(VC_ReferencesPath_x86);</ReferencePath>
+    <LibraryPath>$(ProjectDir)library\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)library\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)library\lib\x64;$(LibraryPath)</LibraryPath>
-    <ReferencePath>$(ProjectDir)library\ref\x64;$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)\</OutDir>
     <IntDir>$(Configuration)\$(PlatformTarget)\</IntDir>
+    <IncludePath>$(ProjectDir)library\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <ReferencePath>$(ProjectDir)library\ref\x64;$(VC_ReferencesPath_x64);</ReferencePath>
+    <LibraryPath>$(ProjectDir)library\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,6 +120,15 @@
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)library\ref\$(PlatformTarget)\*.dll" "$(OutDir)" &amp;
+xcopy /Y /D /E "$(ProjectDir)sounds" "$(OutDir)sounds\" &amp;
+xcopy /Y /D /E "$(ProjectDir)images" "$(OutDir)images\" &amp;
+xcopy /Y /D /E "$(ProjectDir)fonts" "$(OutDir)fonts\"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy game assets and reference DLLs needed to run the game.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -138,6 +147,15 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)library\ref\$(PlatformTarget)\*.dll" "$(OutDir)" &amp;
+xcopy /Y /D /E "$(ProjectDir)sounds" "$(OutDir)sounds\" &amp;
+xcopy /Y /D /E "$(ProjectDir)images" "$(OutDir)images\" &amp;
+xcopy /Y /D /E "$(ProjectDir)fonts" "$(OutDir)fonts\"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy game assets and reference DLLs needed to run the game.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -158,6 +176,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)library\ref\$(PlatformTarget)\*.dll" "$(OutDir)" &amp;
+xcopy /Y /D /E "$(ProjectDir)sounds" "$(OutDir)sounds\" &amp;
+xcopy /Y /D /E "$(ProjectDir)images" "$(OutDir)images\" &amp;
+xcopy /Y /D /E "$(ProjectDir)fonts" "$(OutDir)fonts\"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy game assets and reference DLLs needed to run the game.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -178,6 +205,15 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)library\ref\$(PlatformTarget)\*.dll" "$(OutDir)" &amp;
+xcopy /Y /D /E "$(ProjectDir)sounds" "$(OutDir)sounds\" &amp;
+xcopy /Y /D /E "$(ProjectDir)images" "$(OutDir)images\" &amp;
+xcopy /Y /D /E "$(ProjectDir)fonts" "$(OutDir)fonts\"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy game assets and reference DLLs needed to run the game.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="includes.cpp" />
@@ -215,4 +251,16 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <Target Name="AfterClean">
+    <ItemGroup>
+      <FilesToDelete Include="$(OutDir)sounds\*" />
+      <FilesToDelete Include="$(OutDir)fonts\*" />
+      <FilesToDelete Include="$(OutDir)images\*" />
+      <FilesToDelete Include="$(OutDir)*.dll" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" ContinueOnError="true" />
+    <Exec Command="rmdir &quot;$(OutDir)fonts&quot;" IgnoreExitCode="true" />
+    <Exec Command="rmdir &quot;$(OutDir)images&quot;" IgnoreExitCode="true" />
+    <Exec Command="rmdir &quot;$(OutDir)sounds&quot;" IgnoreExitCode="true" />
+  </Target>
 </Project>
