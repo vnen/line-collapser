@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include "Tetraminos.h"
+#include "sounds.h"
 
 #include <string>
 #include <cstdlib>
@@ -14,20 +15,24 @@ int main (int argc, char* args[])
 	//Initialization function
 	//Exit the program if some error occurred
 	int errorlevel = init();
-	if (errorlevel != 0)
-	{
-		if(SDL_WasInit(SDL_INIT_EVERYTHING) != 0)
-		{ //If the SDL was initialized, turn it off
-			SDL_Quit();
+	if(errorlevel >= 1)
+	{ //If the SDL was initialized, turn it off
+		SDL_Quit();
 
-			if(TTF_WasInit() == 1)
-			{ //If the SDL_ttf was initialized, turn it off
-				TTF_Quit();
-			}
-		}
+		if(errorlevel >= 3)
+		{ //If the SDL_ttf was initialized, turn it off
+			TTF_Quit();
+
+			if(errorlevel >= 4)
+			{ //If the SDL_mixer was initialized, turn it off
+				Mix_CloseAudio();
+			}// >=4
+		}// >=3
 
 		return errorlevel;
-	}
+
+	}// init error
+
 
 	//Timer to control the blocks speed (actually, it controls the frame rate)
 	Timer fpscap;
@@ -46,14 +51,15 @@ int main (int argc, char* args[])
 	/********************/
 	//****** Data ******//
 	/********************/
+
 	//If it is the first iteration
 	bool first = true;
 	
 	//Actual Tetramino
-	int actual = 0;
+	int actual = get_next();
 	
 	//Next Tetramino
-	int next = 1;
+	int next = get_next();
 	
 	//If it is collapsing lines
 	bool collapsing = false;
@@ -64,8 +70,8 @@ int main (int argc, char* args[])
 	//Counting to wait the landing of Tetraminos
 	Timer bottom;
 
-	//A copyfor some lines to make the collapsing animation
-	BLOCK_COLOR backup[4][MATRIX_WIDTH];
+	//A copy for some lines to make the collapsing animation
+	lcBlockColor backup[4][LC_MATRIX_WIDTH];
 
 	//A pointer to an integer array
 	//The first element is the amount of lines
@@ -77,11 +83,77 @@ int main (int argc, char* args[])
 	bool moving_left = false;
 	bool moving_right = false;
 
+	//Play the start screen bgm
+	bool playingBgm = false;
+	playingBgm = playStartBgm();
 
+	//Shows start screen
+	apply_surface(0, 0, startscreen, screen);
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		end_app();
+	}
+
+	//Makes a loop like the main to handle events
+	bool quit = false;
+	while (!quit)
+	{
+		fpscap.start();
+
+		//Handle all the generated events
+		while (SDL_PollEvent (&eventQ))
+		{
+			//Captures the type of event
+			switch (eventQ.type)
+			{
+			//If the user try to close the window
+			case SDL_QUIT:
+				//Sets the flag to quit the main loop
+				end_app();
+				break;
+			//If the user has pressed a key
+			case SDL_KEYDOWN:
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
+				{
+					end_app();									//Sets the flag to quit the main loop
+				}
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
+				{
+					end_app();								//Sets the flag to quit the main loop
+				}
+
+				//If user press space bar, starts the game
+				if(eventQ.key.keysym.sym == SDLK_SPACE)
+				{
+					quit = true;
+				}
+			}//events switch
+		}//events while
+
+		//Keep the frame rate
+		if (fpscap.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fpscap.getTicks());
+	}//start screen loop
+
+
+	//Before start the main loop, start playing the background music
+	if (music)
+		playingBgm = line_collapser::playMainBgm();
+
+	//To avoid warnings when it is still not used
+	playingBgm = playingBgm;
+
+	//Frees memory used by start screen bgm
+	Mix_FreeMusic (sndStartBgm);
 
 
 	//Main loop
-	bool quit = false;
+	quit = false;
 	while (!quit)
 	{
 		fpscap.start();
@@ -113,6 +185,12 @@ int main (int argc, char* args[])
 					quit = true;								//Sets the flag to quit the main loop
 				}
 
+				//If user press 'F1', shows help screen
+				if(eventQ.key.keysym.sym == SDLK_F1)
+				{
+					showHelp();
+				}
+
 				//If the left arrow key was pressed, set the flag
 				if(eventQ.key.keysym.sym == SDLK_LEFT)
 				{
@@ -129,10 +207,47 @@ int main (int argc, char* args[])
 					moving_down = true;
 				}
 
-				//If the space bar was pressed, rotate (counter-clockwise)
+				//If the 'Z' key was pressed, rotate (counter-clockwise)
+				if (eventQ.key.keysym.sym == SDLK_z)
+				{
+					//No rotate when collapsing
+					if(!collapsing)
+						tetras[actual]->rotate();
+				}
+
+				//If the 'M' key was pressed, stops/plays music
+				if (eventQ.key.keysym.sym == SDLK_m)
+				{
+					if(music)
+					{
+						Mix_HaltMusic();
+						music = false;
+					}
+					else
+					{
+						int tmp = Mix_PlayMusic (sndBgm, -1);
+						if(tmp != -1) music = true;
+					}
+				}
+				
+				//If the 'F' key was pressed, enable/disable sound FX
+				if (eventQ.key.keysym.sym == SDLK_f)
+				{
+					soundFX = !soundFX;
+				}
+
+				//If the space bar was pressed, pause
 				if (eventQ.key.keysym.sym == SDLK_SPACE)
 				{
-					tetras[actual]->rotate();
+					/* If the player pauses the game,
+					 * all the movements should be canceled
+					 * because during pause we could miss a KEY_UP event
+					 */
+					moving_down = false;
+					moving_left = false;
+					moving_right = false;
+
+					quit = lcpause();
 				}
 				break;
 
@@ -188,7 +303,7 @@ int main (int argc, char* args[])
 		else if (!collapsing)
 		{
 			//Every 0.1 second
-			if (frame % (GAME_FPS/10) == 0)
+			if (frame % (LC_GAME_FPS/10) == 0)
 			{
 				//If the user is pressing the left arrow, move to left
 				if (moving_left)
@@ -200,7 +315,7 @@ int main (int argc, char* args[])
 			}// if (every 0.1 second)
 
 			//Every 0.05 second and if the user is pressing the down arrow
-			if ((moving_down && (frame % (GAME_FPS/20)) == 0))
+			if ((moving_down && (frame % (LC_GAME_FPS/20)) == 0))
 			{
 				//Move down the Tetramino and check if it is possible
 				bool scoring = tetras[actual]->move_down();
@@ -243,11 +358,12 @@ int main (int argc, char* args[])
 				//If it isn't possible, so the tetramino must finally land
 				else //it can't move down anymore
 				{
+					//Plays effect
+					if(soundFX)
+						playEffect(LC_SOUND_FX_LAND);
+
 					//Stops the timer
 					bottom.stop();
-
-					//Resets the actual tetramino
-					tetras[actual]->reset();
 
 					//Checks for full lines
 					fullLines = check_lines();
@@ -280,7 +396,7 @@ int main (int argc, char* args[])
 
 						//Updates the line counter and the level
 						line += fullLines[0];
-						level = (int)1 + floor((double)line / 10);
+						level = 1 + (int)floor((double)line / 10);
 						//The level can be, at most, 10
 						level = level < 10 ? level : 10;
 
@@ -295,7 +411,7 @@ int main (int argc, char* args[])
 					{
 						//Make a copy of the lines that are collapsing, just to make the animation
 						//Goes through each column of the matrix
-						for (int i = 0; i < MATRIX_WIDTH; i++)
+						for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 						{
 							//For each line that needs to be removed
 							for (int j = 0; j < fullLines[0]; j++)
@@ -308,14 +424,21 @@ int main (int argc, char* args[])
 							}//for (fullLines)
 						}//for (columns)
 
+						//Plays the sound effect
+						if(soundFX)
+							playEffect(LC_SOUND_FX_COLLAPSE);
+
 					}//if (collapsing)
 
 					//If there's no needing to collapse lines
 					else
 					{
+						//Resets the actual tetramino
+						tetras[actual]->reset();
+
 						//The next Tetramino now is the actual
 						actual = next;
-						//The next Tetramino is generated "randomly" (It isn't randomly to make tests easier)
+						//The next Tetramino is generated randomly
 						next = get_next();
 
 						//Try to put the next Tetramino on the matrix
@@ -348,13 +471,13 @@ int main (int argc, char* args[])
 					 * In the last step the line is hidden
 					 */
 
-					if (counting <= (GAME_FPS/10) || (counting > (2*GAME_FPS/10) && counting <= (3*GAME_FPS/10)) ||
-							(counting > (4*GAME_FPS/10) && counting <= (5*GAME_FPS/10)) ||
-							(counting > (6*GAME_FPS/10) && counting <= (7*GAME_FPS/10)) ||
-							(counting > (8*GAME_FPS/10) && counting <= (9*GAME_FPS/10)))
+					if (counting <= (LC_GAME_FPS/10) || (counting > (2*LC_GAME_FPS/10) && counting <= (3*LC_GAME_FPS/10)) ||
+							(counting > (4*LC_GAME_FPS/10) && counting <= (5*LC_GAME_FPS/10)) ||
+							(counting > (6*LC_GAME_FPS/10) && counting <= (7*LC_GAME_FPS/10)) ||
+							(counting > (8*LC_GAME_FPS/10) && counting <= (9*LC_GAME_FPS/10)))
 					//Hides
-					//This function is almost identical to the backuo function, but it erases instead copy
-					for (int i = 0; i < MATRIX_WIDTH; i++)
+					//This function is almost identical to the backup function, but it erases instead copy
+					for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)
 						{
@@ -365,13 +488,13 @@ int main (int argc, char* args[])
 					/* I think it's important to notice that the values in both if statements are the same
 					 * What changes is the comparison operator
 					 */
-					if ((counting > (GAME_FPS/10) && counting <= (2*GAME_FPS/10)) ||
-							(counting > (3*GAME_FPS/10) && counting <= (4*GAME_FPS/10)) ||
-							(counting > (5*GAME_FPS/10) && counting <= (6*GAME_FPS/10)) ||
-							(counting > (7*GAME_FPS/10) && counting <= (8*GAME_FPS/10)))
+					if ((counting > (LC_GAME_FPS/10) && counting <= (2*LC_GAME_FPS/10)) ||
+							(counting > (3*LC_GAME_FPS/10) && counting <= (4*LC_GAME_FPS/10)) ||
+							(counting > (5*LC_GAME_FPS/10) && counting <= (6*LC_GAME_FPS/10)) ||
+							(counting > (7*LC_GAME_FPS/10) && counting <= (8*LC_GAME_FPS/10)))
 					//Shows
 					//This function is almost identical to the backup function, but it copies from backup to matrix, instead the opposite
-					for (int i = 0; i < MATRIX_WIDTH; i++)
+					for (int i = 0; i < LC_MATRIX_WIDTH; i++)
 					{
 						for (int j = 0; j < fullLines[0]; j++)
 						{
@@ -381,7 +504,7 @@ int main (int argc, char* args[])
 
 
 				//If the counting is beyond the last step
-				if (counting > (9*GAME_FPS/10))
+				if (counting > (9*LC_GAME_FPS/10))
 				{
 					//For each fullLine
 					for (int i = 0; i < fullLines[0]; i++)
@@ -393,10 +516,13 @@ int main (int argc, char* args[])
 					//We're not collapsing lines anymore
 					collapsing = false;
 
+					//Resets the actual tetramino
+					tetras[actual]->reset();
+
 					//The next Tetramino now is the actual
 					actual = next;
 
-					//The next Tetramino is generated "randomly"
+					//The next Tetramino is generated randomly
 					next = get_next();
 
 					//If it isn't possible, game over
@@ -431,7 +557,7 @@ int main (int argc, char* args[])
 		//Writes the actual level
 		print_level (level);
 
-		//Writes the matrix
+		//Puts the matrix on screen
 		paint_matrix();
 
 		//Updates the screen and check against errors
@@ -441,8 +567,8 @@ int main (int argc, char* args[])
 		}
 
 		//Keep the frame rate
-		if (fpscap.getTicks() < 1000 / GAME_FPS)
-			SDL_Delay ( (1000 / GAME_FPS) - fpscap.getTicks());
+		if (fpscap.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fpscap.getTicks());
 
 	}//while (main loop)
 

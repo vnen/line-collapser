@@ -21,28 +21,31 @@ namespace line_collapser
 
 	void I::draw_in_next()
 	{
-		insert_next ((NEXT_WIDTH / 2) - (2 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
-		insert_next ((NEXT_WIDTH / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
-		insert_next ((NEXT_WIDTH / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
-		insert_next ((NEXT_WIDTH / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT - BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) - (2 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
+		insert_next ((LC_NEXT_WIDTH / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT - LC_BLOCK_SIZE) / 2, this->cor);
 
 	}//void I::draw_in_next()
 
 	void I::reset()
 	{
-		//Zera a matriz
+		//Empties the matrix
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
+		//Resets position
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+		//Resets orientation
 		this->matrix[1][0] = 1;
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
+
+		//Set as reseted
+		this->reseted = true;
 
 	}//void I::reset()
 
@@ -63,30 +66,27 @@ namespace line_collapser
 
 	void O::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 0 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 0 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//void O::draw_in_next()
 
 	void O::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[2][1] = 1;
 		this->matrix[2][2] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void O::reset()
@@ -108,30 +108,27 @@ namespace line_collapser
 
 	void L::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
 
 	}//L::void draw_in_next()
 
 	void L::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][1] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void L::reset()
@@ -153,30 +150,27 @@ namespace line_collapser
 
 	void J::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//J::void draw_in_next()
 
 	void J::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][3] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void J::reset()
@@ -198,30 +192,27 @@ namespace line_collapser
 
 	void S::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//S::void draw_in_next()
 
 	void S::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][1] = 1;
 		this->matrix[2][2] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void S::reset()
@@ -243,30 +234,27 @@ namespace line_collapser
 
 	void Z::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
 
 	}//Z::void draw_in_next()
 
 	void Z::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[2][2] = 1;
 		this->matrix[2][3] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void Z::reset()
@@ -288,30 +276,27 @@ namespace line_collapser
 
 	void T::draw_in_next()
 	{
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (0 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) - (0 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
-		insert_next (((NEXT_WIDTH - 1 * BLOCK_SIZE) / 2) + (1 * BLOCK_SIZE), (NEXT_HEIGHT / 2) - (1 * BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (0 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) - (0 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
+		insert_next (((LC_NEXT_WIDTH - 1 * LC_BLOCK_SIZE) / 2) + (1 * LC_BLOCK_SIZE), (LC_NEXT_HEIGHT / 2) - (1 * LC_BLOCK_SIZE), this->cor);
 
 	}//T::void draw_in_next()
 
 	void T::reset()
 	{
-		//Zera a matriz
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
 
-		//Reinicia a posiXXo
 		this->x = -1;
 		this->y =  3;
-		//Reinicia a orientaXXo
+
 		this->matrix[1][1] = 1;
 		this->matrix[1][2] = 1;
 		this->matrix[1][3] = 1;
 		this->matrix[2][2] = 1;
 
-		//Marca como resetado
 		this->reseted = true;
 
 	}//void T::reset()

@@ -1,11 +1,15 @@
-///Last update: 2010/05/23 00:15 (UTC)
+///Last update: 2010/05/30 14:20 (BRT)
 
-***************************************************
-* For now, part of the notes and comments are in  *
-* brazilian portuguese.                           *
-* I know english poorly, but I'll translate the   *
-* notes and comments... I already started...      *
-***************************************************
+**********NOTE:::
+I'm officially stopping this project
+It get on I wanted to fro
+Maybe I'll remake this and then will be a lot easier to add features
+But it's all messed up and change something is becoming more and more harder to do
+I want to study OpenGL, but the graphical part of this is too much tied to change everything
+
+If someone wants to improve this project, just let me know (it's open source)
+mail at georgemarques . com
+
 
 ***************************************************
 * This file contains the list of known bugs, some *
@@ -23,9 +27,17 @@
 
 - Com'on it's Tetris!
 
+- F1: game help
+
 - Arrow keys: move tetriminos
 
-- Space bar: rotate tetriminos counter-clockwise
+- Z: rotate tetriminos counter-clockwise
+
+- M: plays/stops music
+
+- F: enable/disable sound FX
+
+- Space bar: pause
 
 - Esc: Quit
 
@@ -35,10 +47,19 @@
 *                                                 *
 ***************************************************
 
-- 0.8.0.4
-	- added a fix to the Flying tetraminos bug
-	- this change makes the tetramino move down instead finally lands, so it's a little weird when it's happening
+- 0.9.1
+	- pause function
+	- background music and sound effects (poor, but working)
+	- help screen
+	- start screen
+	- at least for now, this project is over :(
 
+- 0.8.0.4
+	- added a fix to the 'Flying tetraminos' bug
+		- this change makes the tetramino move down instead finally lands, so it's a little weird when it happens
+	- game speed is not influenced by frame rate
+	- random Tetraminos
+	
 - 0.8.0.3
 
 	- added GNU/Linux support (fixed c++ errors)
@@ -46,7 +67,7 @@
 	
 - 0.8.0.2
 
-	- tetriminos now land in constant time (level-independent)
+	- tetraminos now land in constant time (level-independent)
 
 
 ***************************************************
@@ -55,39 +76,50 @@
 *                                                 *
 ***************************************************
 
-- Sometimes, rotation doesn't work or it's done twice (maybe a problem with event handler?)
+- Flying tetramino 2: this is really hard to notice!
+	When there is a line collapsing, if the tetramino which fill the line was an 'I', if you try to rotate the 'I' will be
+	pinned on top of screen. (fixed 0.9.1)
 
-- When the tetrimino lands, before launch of the next one, it don't move down anymore even if you move left/right over an empty space (fixed 0.8.0.4)
 
-- The landing of tetriminos needs certain delay before to launch the next one (fixed 0.8.0.2)
+- Sometimes, rotation doesn't work or it's done twice (maybe a problem with event handler?) (I can't reproduce that anymore)
+
+- When the tetramino lands, before launch of the next one, it don't move down anymore even if you move left/right 
+	over an empty space (fixed 0.8.0.4)
+
+- The landing of tetraminos needs certain delay before to launch the next one (fixed 0.8.0.2)
 
 - The landing isn't done in constant time: sometimes is faster, somtimes is slower (fixed 0.8.0.2)
 
 
 ***************************************************
 *                                                 *
-*               Implementations to do             *
+*               Features to implement             *
 *                                                 *
 ***************************************************
 
-- Random Tetraminos (deactivated for now, make the tests easier)
-
-- Initial and final screens
-
 - Add sound (it is harder to make the sound than make it runs)
-
+	- this is probably the next thing I'll do, because I think it'll really improve the gameplay
+	
 - Make an icon (a decent one)
 
-- Make the moving frame rate independent (I think it fix some timing glitches)
-
 - Make a game over screen, with an option to play again
+	
+- Initial and final screens
 
 - Store High Scores
 
+- Pause function (added 0.8.9.1)
+
+- Random Tetraminos (added 0.8.0.4)
+
+- Make the moving frame rate independent (looking better, I think it isn't really needed)
+	- It is based on FPS, but a change on GAME_FPS value doesn't change the speed of game
+	- (since a change on version 0.8.0.4)
+
 
 ***************************************************
 *                                                 *
-*            Additional Implementations           *
+*               Additional Features               *
 *                                                 *
 ***************************************************
 

@@ -1,11 +1,15 @@
 #include "includes.h"
+#include "mersenne_twister.h"
+#include "lcwin32.h"
+#include "Timer.h"
+#include "sounds.h"
 
-//Bibliotecas-padro
+//Standard libraries
 #include <string>
 #include <cstdlib>
 #include <math.h>
 
-//Bibliotecas extras
+//SDL libraries
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
@@ -17,7 +21,7 @@ namespace line_collapser
 											///**************Variables***************///
 											///**************************************///
 
-BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH] //[linha][coluna]
+lcBlockColor game_matrix[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH] //[line][column]
 =	{{NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
      {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
@@ -39,10 +43,10 @@ BLOCK_COLOR game_matrix[MATRIX_HEIGHT][MATRIX_WIDTH] //[linha][coluna]
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE},
 	 {NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE,NONE}};
 
-//Velocidade do bloco (em movimentos por segundo)
-int block_mps = 1;
+//Blocks speeds (in moves per second) ****NOT USED
+//int block_mps = 1;
 
-//Dados
+//Data
 int score = 0;
 int level = 1;
 int line = 0;
@@ -52,6 +56,15 @@ SDL_Surface* screen = NULL;
 
 //Images
 SDL_Surface* background = NULL;
+SDL_Surface* startscreen = NULL;
+
+//Sounds
+Mix_Music* sndBgm = NULL;
+Mix_Music* sndStartBgm = NULL;
+
+//Music and FX enabled state
+bool music = true;
+bool soundFX = true;
 
 //Fonts
 TTF_Font* font = NULL;
@@ -62,7 +75,7 @@ SDL_Surface* Sline = NULL;
 SDL_Surface* Slevel = NULL;
 
 //Sprites
-SDL_Surface* block_colors [COLORS_AMOUNT];
+SDL_Surface* block_colors [LC_COLORS_AMOUNT];
 
 //Event
 SDL_Event eventQ;
@@ -73,49 +86,71 @@ SDL_Event eventQ;
 										///****************Basic*****************///
 										///**************************************///
 
-//Inicializa o sistema
+//Initializes the system
 int init()
 {
-	//Inicializa o SDL e encerra se houver algum erro
+	//Initializes the SDL and exit if there was an error
 	if (SDL_Init (SDL_INIT_EVERYTHING) == -1)
 		{ return 1; }
 
-	//Inicializa a SDL_ttf e encerra se houver algum erro
+	//Initializes the SDL_ttf and exit if there was an error
 	if (TTF_Init())
 		{ return 3; }
 
-	//Cria a janela
-	screen = SDL_SetVideoMode (SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	//Initializes the SDL_mixer and exit if there was an error
+	if (Mix_OpenAudio(LC_SOUND_SAMPLERATE, LC_SOUND_FORMAT, LC_SOUND_CHANNELS, LC_SOUND_CHUNKSIZE) == -1)
+		{ return 4; }
 
-	//Carrega os arquivos necessrios e checa por erros
+	//Create the window
+	screen = SDL_SetVideoMode (LC_SCREEN_WIDTH, LC_SCREEN_HEIGHT, LC_SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
+
+	//Load the necessary files and check for errors
 	if (!load_files())
 		{ return 5; }
 
-	//Alera o ttulo
+	//Changes the window title
 	SDL_WM_SetCaption ("Line Collapser", NULL);
 
-	//Se houve algum erro com a janela, encerrar
+	//If there was an error with the window creation, exits the program
 	if (screen == NULL)
 		{ return 6; }
 
-	//Se deu tudo certo
+	//Start the random number generation function
+	mt_init();
+
+	//If everything went fine
 	return 0;
 
 }//init()
 
-//Carrega os arquivos necessrios
+//Loads the necessaries files
 bool load_files()
 {
+	//Opens start screen image
+	startscreen = load_image ("images/start.png");
+	if (startscreen == NULL)
+		{ return false; }
+
+	//Opens background image
 	background = load_image ("images/background.png");
 	if (background == NULL)
 		{ return false; }
 
+	//Opens background music
+	sndBgm = Mix_LoadMUS ("sounds/mainbgm.ogg");
+
+	//Opens background music for start screen
+	sndStartBgm = Mix_LoadMUS ("sounds/startbgm.ogg");
+
+	
+	//Opens font (for score, line and level)
 	font = TTF_OpenFont ("fonts/r-impresive_6.ttf", 16);
 
-	for (int i = 0; i < COLORS_AMOUNT; i++)
+	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
 	{
 		char tmp[21];
 		sprintf(tmp, "images/block (%d).png", i+1);
+		block_colors[i] = NULL;
 		block_colors[i] = load_image (tmp);
 		if (block_colors[i] == NULL)
 			{ return false; }
@@ -126,129 +161,146 @@ bool load_files()
 }//load_files()
 
 
-//Libera a memria e encerra o sistema
+//Frees the memory and closes system
 void end_app()
 {
-	//Fecha a fonte
+	end_app(0);
+} //void end_app(int code)
+
+//Frees memory and exit the system with a exit code
+void end_app(int code)
+{
+	//Stops all sounds
+	Mix_HaltMusic();
+	Mix_HaltChannel(-1);
+
+	//Close the music
+	Mix_FreeMusic(sndBgm);
+
+	//Closes the font
 	TTF_CloseFont (font);
 
-	//Libera as surfaces
+	//Frees the surfaces
 	SDL_FreeSurface (background);
-	for (int i = 0; i < COLORS_AMOUNT; i++)
+	for (int i = 0; i < LC_COLORS_AMOUNT; i++)
 	{
 		SDL_FreeSurface (block_colors[i]);
 	}
 	SDL_FreeSurface (Sscore);
 	SDL_FreeSurface (Sline);
 
-	//Encerra as bibliotecas
+	//Closes the libraries
+	Mix_CloseAudio();
 	TTF_Quit ();
 	SDL_Quit ();
-}
+
+	exit(code);
+} //void end_app(int code)
+
 
 
 											/************************************************/
 											/****************Basic Drawing*******************/
 											/************************************************/
 
-//Insere um bloco de acordo com a matriz
-void insert_block (int x, int y, BLOCK_COLOR color)
+//Insert a block, according to the matrix
+void insert_block (int x, int y, lcBlockColor color)
 {
 	if (color != NONE)
 	{
-		apply_surface ( (x * BLOCK_SIZE + GAME_X), (y * BLOCK_SIZE + GAME_Y), block_colors[(int)color], screen);
+		apply_surface ( (x * LC_BLOCK_SIZE + LC_GAME_X), (y * LC_BLOCK_SIZE + LC_GAME_Y), block_colors[(int)color], screen);
 	}
 }//insert_block
 
-//Insere um bloco na caixa next (com x,y relativo ao interior da caixa)
-void insert_next (int x, int y, BLOCK_COLOR color)
+//Insert a block in next box (with x,y relative to the interior of the box)
+void insert_next (int x, int y, lcBlockColor color)
 {
 	if (color != NONE)
 	{
-		apply_surface ( (x + NEXT_X), (y + NEXT_Y), block_colors[(int)color], screen);
+		apply_surface ( (x + LC_NEXT_X), (y + LC_NEXT_Y), block_colors[(int)color], screen);
 	}
 }//insert_next
 
-//Desenha a pontuao
+//Draws score
 void print_score (int scoreNum)
 {
-	SDL_Color cor = {0,0,0};	//Cor RGB(0,0,0)
-	char scoreChar[50];			//Score em 'char'
+	SDL_Color cor = {0,0,0};	//Color RGB(0,0,0)
+	char scoreChar[50];			//Score in 'char'
 
-	sprintf(scoreChar, "%d", scoreNum);	//Converte o score para 'char'
+	sprintf(scoreChar, "%d", scoreNum);	//Converts score to 'char'
 
-	//Armazena a surface para o score
+	//Frees the old and store the new surface for score
 	SDL_FreeSurface (Sscore);
 	Sscore = TTF_RenderText_Solid (font, scoreChar, cor);
 
-	//Calcula a posio do score
-	//(este deve ficar alinhado abaixo e a direita da caixa, com 5px de margem)
-	int x = SCORE_X + SCORE_WIDTH - Sscore->w - 7;
-	int y = SCORE_Y + SCORE_HEIGHT - Sscore->h - 5;
+	//Calculate the score's position
+	//(it must stay aligned down-right of the box, with a 5px margin)
+	int x = LC_SCORE_X + LC_SCORE_WIDTH - Sscore->w - 7;
+	int y = LC_SCORE_Y + LC_SCORE_HEIGHT - Sscore->h - 5;
 
-	//Aplica o texto
+	//Applies the text
 	apply_surface (x, y, Sscore, screen);
 }//print_score
 
 
-//Desenha a quantidade de linhas
+//Draws the number of lines collapsed
 void print_line (int lineNum)
 {
-	SDL_Color cor = {0,0,0};			//Cor RGB(0,0,0)
-	char lineChar[50];					//Line em 'char'
+	SDL_Color cor = {0,0,0};			//Color RGB(0,0,0)
+	char lineChar[50];					//Line in 'char'
 
-	sprintf(lineChar, "%d", lineNum);	//Converte a line para 'char'
+	sprintf(lineChar, "%d", lineNum);	//Converts line to 'char'
 
-	//Armazena a surface para a line
+	//Frees the old and store the new surface for line
 	SDL_FreeSurface (Sline);
 	Sline = TTF_RenderText_Solid (font, lineChar, cor);
 
-	//Calcula a posio da line
-	//(esta deve ficar centralizada na caixa, com 5px de margem para baixo)
-	int x = LINE_X + ((LINE_WIDTH - Sline->w) / 2);
-	int y = LINE_Y + LINE_HEIGHT - Sline->h - 5;
+	//Calculate the line's position
+	//(it must be centralized in the box, with a 5px margin-bottom)
+	int x = LC_LINE_X + ((LC_LINE_WIDTH - Sline->w) / 2);
+	int y = LC_LINE_Y + LC_LINE_HEIGHT - Sline->h - 5;
 
-	//Aplica o texto
+	//Applies the text
 	apply_surface (x, y, Sline, screen);
 }//print_line
 
 
-//Desenha o nvel
+//Draws the level
 void print_level (int levelNum)
 {
-	SDL_Color cor = {0,0,0};	//Cor RGB(0,0,0)
-	char levelChar[50];			//Level em 'char'
+	SDL_Color cor = {0,0,0};	//Color RGB(0,0,0)
+	char levelChar[50];			//Level in 'char'
 
-	sprintf(levelChar, "%d", levelNum);	//Converte o level para 'char'
+	sprintf(levelChar, "%d", levelNum);	//Converts level to 'char'
 
-	//Armazena a surface para a level
+	//Frees the old and store the new surface for score
 	SDL_FreeSurface (Slevel);
 	Slevel = TTF_RenderText_Solid (font, levelChar, cor);
 
-	//Calcula a posio do level
-	//(este deve ficar centralizado na caixa, com 5px de margem para baixo)
-	int x = LEVEL_X + ((LEVEL_WIDTH - Slevel->w) / 2);
-	int y = LEVEL_Y + LEVEL_HEIGHT - Slevel->h - 5;
+	//Calculate level's position
+	//(it must be centralized in the box, with a 5px margin-bottom)
+	int x = LC_LEVEL_X + ((LC_LEVEL_WIDTH - Slevel->w) / 2);
+	int y = LC_LEVEL_Y + LC_LEVEL_HEIGHT - Slevel->h - 5;
 
-	//Aplica o texto
+	//Applies the text
 	apply_surface (x, y, Slevel, screen);
 
 }//print_level
 
 
-//Desenha a matriz
+//Draws the matrix
 void paint_matrix ()
 {
-	//Percorre a matriz
-	for( int i = 0; i < MATRIX_HEIGHT; i++)
-		for( int j = 0; j < MATRIX_WIDTH; j++)
+	//Goes through matrix
+	for( int i = 0; i < LC_MATRIX_HEIGHT; i++)
+		for( int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
 			insert_block (j, i, game_matrix[i][j]);
 		}//for
 }//paint_matrix
 
 									/************************************************/
-									/**************Especific Drawing*****************/
+									/***************Specific Drawing*****************/
 									/************************************************/
 
 SDL_Surface *load_image( std::string filename )
@@ -296,16 +348,16 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 										/*****************Game functions*****************/
 										/************************************************/
 
-//Retira uma linha da matriz
+//Collapse a line from matrix
 void collapse_line (int line)
 {
-	//Percorre a partir da linha para cima
+	//Goes through the matrix from the line to top
 	for (int i = line; i >= 0; i--)
 	{
-		//Percorre cada clula dentro da linha
-		for (int j = 0; j < MATRIX_WIDTH; j++)
+		//Goes through each cell into the line
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
-			//Se for a linha mais alta (0) prenche com NONE, se no, apenas copia da linha de cima
+			//If it is the line at the top (0) fills with NONE, else, just copy from the line above
 			game_matrix[i][j] = (i == 0 ? NONE : game_matrix[i-1][j]);
 		}//for
 	}//for
@@ -315,11 +367,11 @@ void collapse_line (int line)
 
 
 
-//Checa por linhas completas e retorna um vetor no formato:
-//{ qtd de linhas, linha 1, linha 2, linha 3, linha 4 }
+//Checks for full lines and returns a vector in the format:
+//{ ammount of lines, line 1, line 2, line 3, line 4 }
 int* check_lines()
 {
-	//Armazena as informaes para retorno
+	//Stores the information to return
 	int* tmp;
 	tmp = (int*) malloc( sizeof(int)*5 );
 	for (int i = 0; i < 5; i++)
@@ -327,28 +379,28 @@ int* check_lines()
 		tmp[i] = 0;
 	}//for
 
-	//Armazena a quantidade de blocos por linha
+	//Stores the ammount of filled cells per line
 	int filleds = 0;
 
-	//Percorre cada uma das linhas
-	for (int i = 0; i < MATRIX_HEIGHT; i++)
+	//Goes through each line
+	for (int i = 0; i < LC_MATRIX_HEIGHT; i++)
 	{
-		//Percorre cada clula dentro da linha
-		for (int j = 0; j < MATRIX_WIDTH; j++)
+		//Goes through each cell inside the line
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
 		{
-			//Se estiver preenchido
+			//If it is filled
 			if (game_matrix[i][j] != NONE)
 			{
-				//Acrescenta 1 aos filleds
+				//Increments filleds
 				filleds++;
 			}
-		}//for (clulas)
+		}//for (cells)
 
-		//Se todas esto preenchidas (filleds == 10)
-		if (filleds == MATRIX_WIDTH)
+		//If everyone is filled (filleds == width of matrix)
+		if (filleds == LC_MATRIX_WIDTH)
 		{
-			//Armazena no vetor de retorno, na posio seguinte
-			//Isto depende da quantidade de linhas que j foram preenchidas
+			//Stores in the return vector, in the next empty position
+			//It depends on how many lines are filled and already checked
 			switch (tmp[0])
 			{
 			case 0:
@@ -359,8 +411,8 @@ int* check_lines()
 				tmp[tmp[0]] = i;
 				break;
 
-			//Se chegar no limite (4) j retorna para economizar CPU
-			//e evitar um acesso indevido  memria
+			//If it arrives the limit (4) returns at once to save CPU
+			//and avoid a undue access to memory
 			case 4:
 				tmp[0] = tmp[0] + 1;
 				tmp[tmp[0]] = i;
@@ -371,7 +423,7 @@ int* check_lines()
 		}// if (filleds)
 		filleds = 0;
 
-	}//for (linhas)
+	}//for (lines)
 
 	return tmp;
 }//int* check_lines()
@@ -379,16 +431,305 @@ int* check_lines()
 
 
 
-int nextsss = 0;
-//Gera um tetramino aleatrio
+
+
+//Generates a random tetramino (a number between 0 and 6)
 int get_next()
 {
-	//return SDL_GetTicks() % 7;
-	//Just for tests
-	return nextsss++ % 7;
+	//Returns a random number between 0 and 6
+	//It uses
+	return (int) mt_random() % 7 ;
 
 }//int get_next()
 
+
+
+
+
+
+
+//Pauses the game
+/** returns 'true' if the user wants to quit game */
+bool lcpause()
+{
+	//No music when the game is paused
+	int musicState = musicTogglePause();
+
+	//Updates screen
+	//Applies the background
+	apply_surface(0, 0, background, screen);
+
+	//Writes the score
+	print_score (score);
+
+	//Writes the amount of lines collapsed
+	print_line (line);
+
+	//Writes the actual level
+	print_level (level);
+
+	//Puts the matrix on screen
+	paint_matrix();
+
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		return true;
+	}
+
+
+	//Makes a backup of game_matrix
+	lcBlockColor matrix_backup[LC_MATRIX_HEIGHT][LC_MATRIX_WIDTH];
+	/** Make the screen full of grey blocks
+	 * so the player won't have time to think when paused
+	 * (cheating isn't allowed =P)
+	 * Ah, and with a simple stacking animation
+	 */
+	for (int i = LC_MATRIX_HEIGHT - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
+		{
+			matrix_backup[i][j] = game_matrix[i][j];
+			game_matrix[i][j] = GREY;
+		}//for (each line)
+
+		//So the animation
+		//Puts the matrix on screen
+		paint_matrix();
+
+		//Updates the screen and check against errors
+		if (SDL_Flip(screen) == -1)
+		{
+			return true;
+		}
+		SDL_Delay(20);
+
+	}//for (each column)
+
+
+	//If the user wants to quit while paused
+	bool quit = false;
+
+	//Create a loop like the main
+	Timer fps;
+	bool pause = true;
+	while (pause)
+	{
+		//Starts the timer to cap the frame rate
+		fps.start();
+
+		//Captures the unpause and quit events
+		while (SDL_PollEvent (&eventQ))
+		{
+			//Captures the type of event
+			switch (eventQ.type)
+			{
+			//If the user try to close the window
+			case SDL_QUIT:
+				//Sets the flag to quit the main loop
+				quit = true;
+				break;
+			//If the user has pressed a key
+			case SDL_KEYDOWN:
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
+				{
+					pause = false;
+					quit = true;								//Sets the flag to quit the main loop
+				}
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
+				{
+					pause = false;
+					quit = true;								//Sets the flag to quit the main loop
+				}
+
+				//If the user pressed the space bar
+				if (eventQ.key.keysym.sym == SDLK_SPACE)
+				{
+					pause = false;
+				}
+
+				//If the user pressed the F1 key, shows help
+				if (eventQ.key.keysym.sym == SDLK_F1)
+				{
+
+					showHelp();
+
+					//The screen was changed, so we have to do this again:
+					//Applies the background
+					apply_surface(0, 0, background, screen);
+
+					//Writes the score
+					print_score (score);
+
+					//Writes the amount of lines collapsed
+					print_line (line);
+
+					//Writes the actual level
+					print_level (level);
+
+					//Puts the matrix on screen
+					paint_matrix();
+
+					//Updates the screen and check against errors
+					if (SDL_Flip(screen) == -1)
+					{
+						quit = true;
+					}
+					//Puts the matrix on screen
+					paint_matrix();
+
+					//Updates the screen and check against errors
+					if (SDL_Flip(screen) == -1)
+					{
+						return true;
+					}
+
+				}
+
+				//If the 'F' key was pressed, enable/disable sound FX
+				if (eventQ.key.keysym.sym == SDLK_f)
+				{
+					soundFX = !soundFX;
+				}
+
+				//If the 'M' key was pressed, enable/disable music
+				if (eventQ.key.keysym.sym == SDLK_m)
+				{
+					music = !music;
+				}
+
+				break;
+			}//switch events
+		}//while events
+
+		/** Caps the frame rate
+		 * We don't the game runs on a super speed (even if there is no animation)
+		 * because it will consume CPU/RAM resources without needing
+		 */
+		if (fps.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fps.getTicks());
+
+	}//while (pause)
+
+	//Turns back to the game
+	for (int i = 0; i < LC_MATRIX_HEIGHT; i++)
+	{
+		for (int j = 0; j < LC_MATRIX_WIDTH; j++)
+		{
+			game_matrix[i][j] = matrix_backup[i][j];
+		}//for (each line)
+	}//for (each column)
+
+	//Now we turn on the music again... if it is paused
+	if (musicState == LC_MUSIC_PAUSED && music)
+		musicTogglePause();
+
+	return quit;
+}
+
+
+
+
+
+
+
+
+//Shows help screen
+void showHelp()
+{
+	Timer fpscap;
+
+	//Loads the image
+	SDL_Surface* img = NULL;
+	img = load_image("images/help.png");
+
+	//Check if image was loaded fine
+	if (img == NULL)
+		end_app(70);
+
+	//Applies image
+	apply_surface(0, 0, img, screen);
+
+	//Updates the screen and check against errors
+	if (SDL_Flip(screen) == -1)
+	{
+		end_app(71);
+	}
+
+	bool quit = false;
+	while (!quit)
+	{
+		fpscap.start();
+
+		//Handle all the generated events
+		while (SDL_PollEvent (&eventQ))
+		{
+			//Captures the type of event
+			switch (eventQ.type)
+			{
+			//If the user try to close the window
+			case SDL_QUIT:
+				//Exit the game
+				SDL_FreeSurface(img);
+				end_app();
+				break;
+			//If the user has pressed a key
+			case SDL_KEYDOWN:
+				//All this stuff only to check the Alt+F4
+				if(    (eventQ.key.keysym.sym == SDLK_F4)		//If the user was pressed F4
+				   &&  (eventQ.key.keysym.mod & KMOD_LALT)		//and the left Alt key was pressed
+				   && !(eventQ.key.keysym.mod & KMOD_CTRL)		//and the Ctrl key wasn't pressed
+				   && !(eventQ.key.keysym.mod & KMOD_SHIFT))	//and the Shift key wasn't pressed
+				{
+					end_app();
+				}
+				if (eventQ.key.keysym.sym == SDLK_ESCAPE)		//If the user was pressed Esc
+				{
+					end_app();
+				}
+				//If user press 'F1', come back
+				if (eventQ.key.keysym.sym == SDLK_F1)
+				{
+					quit = true;
+				}
+
+				//If the 'M' key was pressed, stops/plays music
+				if (eventQ.key.keysym.sym == SDLK_m)
+				{
+					if(music)
+					{
+						Mix_HaltMusic();
+						music = false;
+					}
+					else
+					{
+						int tmp = Mix_PlayMusic (sndBgm, -1);
+						if(tmp != -1) music = true;
+					}
+				}
+
+				//If the 'F' key was pressed, enable/disable sound FX
+				if (eventQ.key.keysym.sym == SDLK_f)
+				{
+					soundFX = !soundFX;
+				}
+
+			}//events switch
+		}//events loop
+
+		//Keep the frame rate
+		if (fpscap.getTicks() < 1000 / LC_GAME_FPS)
+			SDL_Delay ( (1000 / LC_GAME_FPS) - fpscap.getTicks());
+
+	} //main loop
+
+	SDL_FreeSurface(img);
+
+}//void showHelp()
 
 
 }//namespace

@@ -2,10 +2,10 @@
 
 namespace line_collapser
 {
-	//Construtor
+	//Constructor
 	Tetramino::Tetramino()
 	{
-		//Zera os atributos
+		//Sets the initial values for attributes
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 				this->matrix[i][j] = 0;
@@ -22,9 +22,10 @@ namespace line_collapser
 
 
 
-	//Coloca o tetramino na matiz do jogo
-	//devolve 'false' se tentar colocar em posiXXo jX ocupada
-	//se force for 'true' coloca na posiXXo, mesmo se jX ocupada e ignora se tiver algo pra fora da matriz
+	/* Puts Tetramino inside the game matrix
+	 * if 'force' is 'true', puts even if the position is occupied or out of the matrix
+	 * returns 'false' tried to put in an occupied position
+	 */
 	bool Tetramino::put_in_matrix(bool force)
 	{
 		bool flag = true;
@@ -34,7 +35,7 @@ namespace line_collapser
 			for (int i = 0; i < 4; i++)
 				for (int j = 0; j < 4; j++)
 				{
-					//Se x + i ou y + i  X negativo, ainda estX fora da matriz do jogo
+					//If x + i or y + i  is negative, still is out of game matrix
 					if (((this->x + i) < 0) || ((this->y + j) < 0))
 					{
 						if (matrix[i][j] == 1)
@@ -42,8 +43,8 @@ namespace line_collapser
 							return false;
 						}//if
 					}//if
-					//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-					if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+					//If x + i or y + i is greater than limit, it is too out of matrix
+					if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					{
 						if (matrix[i][j] == 1)
 						{
@@ -64,11 +65,11 @@ namespace line_collapser
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 			{
-				//Se x + i ou y + i  X negativo, ainda estX fora da matriz do jogo
+				//If x + i or y + i  is negative, still is out of game matrix
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
-				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				//If x + i or y + i is greater than limit, it is too out of matrix
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -90,36 +91,38 @@ namespace line_collapser
 
 
 
-	//Move para baixo
-	//Devolve 'false' se nao pode se mover nesta direXXo
+	/* Moves down
+	 * returns 'false' if it can't move to that direction
+	 */
 	bool Tetramino::move_down()
 	{
-		//Se estiver resetado, nXo X possXvel mover (ele ainda nXo estX na matriz)
+		//If it is reseted, it isn't possible to move (it isn't on the matrix)
 		if (this->reseted) return false;
 
 		bool flag = true;
 		
-		//SequXncia:
-			//Tirar da matriz do jogo (se ainda nXo foi colocado)
-			//Incrementar a posiXXo vertical (x)
-			//Verificar se hX colisXes usando 'put_in_matrix(false)'
-			//Se houver
-				//Decrementar a posiXXo vertical (x)
-				//Recoloca na matriz
-				//Retorna 'false'
-			//Se nXo houver
-				//JX colocou usando 'put_in_matrix(false)'
-				//Retorna 'true'
+		/*:
+			Removes it from game matrix
+			Increments vertical position (x)
+			Check for collisions using 'put_in_matrix(false)'
+			If there are collisions
+				Decrements vertical position (x)
+				Puts it again on matrix
+				Returns 'false'
+			If there are not
+				Already put using 'put_in_matrix(false)'
+				Returns 'true'
+		 */
 
-		//Tirar da matriz do jogo (o contrXrio de 'put_in_matrix()')
+		//Removes it from game matrix (the inverse of 'put_in_matrix()')
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 			{
-				//Se x + i ou y + i  X negativo, ainda estX fora da matriz do jogo
+				//If x + i or y + i  is negative, still is out of game matrix
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
-				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				//If x + i or y + i is greater than limit, it is too out of matrix
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -131,31 +134,31 @@ namespace line_collapser
 				}//if
 			}//for
 
-		//Incrementar a posiXXo vertical (x)
+		//Increments vertical position (x)
 		this->x++;
 
-		//Verificar se hX colisXes usando 'put_in_matrix(false)'
+		//Check for collisions using 'put_in_matrix(false)'
 		flag = this->put_in_matrix(false);
 
-		//Se houver
+		//If there are collisions
 		if (!flag)
 		{
-			//Decrementar a posiXXo vertical (x)
+			//Decrements vertical position (x)
 			this->x--;
 
-			//Recoloca na matriz
-			//(sem forXar. Tecnicamente, o espaXo foi completamente esvaziado,
-			//entXo mesmo sem forXar a funXXo deve ter sucesso, caso contrXrio hX um erro indeterminado [buffer overflow???])
+			//Puts it again on matrix
+			//(without 'force'. Ttechnically, the space was emptied,
+			//so, even without forcing, the function must have success, or else we have an unknown error [buffer overflow could cause that])
 			if (!this->put_in_matrix(false)) return false;
 
-			//Retorna 'false'
+			//Returns 'false'
 			return false;
 		}//if
-		//Se nXo houver
+		//If there are not
 		else
 		{
-			//JX colocou usando 'put_in_matrix(false)'
-			//Retorna 'true'
+			//Already put using 'put_in_matrix(false)'
+			//Returns 'true'
 			return true;
 		}//else
 
@@ -165,36 +168,35 @@ namespace line_collapser
 
 
 
-	//Move para a esquerda
-	//Devolve 'false' se nao pode se mover nesta direXXo
+	/* Moves left
+	 * returns 'false' if it can't move to that direction
+	 */
 	bool Tetramino::move_left()
 	{
-		//Se estiver resetado, nXo X possXvel mover (ele ainda nXo estX na matriz)
+		//If it is reseted, it isn't possible to move (it isn't on the matrix)
 		if (this->reseted) return false;
 
 		bool flag = true;
 		
-		//SequXncia:
-			//Tirar da matriz do jogo (se ainda nXo foi colocado)
-			//Decrementar a posiXXo horizontal (y)
-			//Verificar se hX colisXes usando 'put_in_matrix(false)'
-			//Se houver
-				//Incrementar a posiXXo vertical (y)
-				//Recoloca na matriz
-				//Retorna 'false'
-			//Se nXo houver
-				//JX colocou usando 'put_in_matrix(false)'
-				//Retorna 'true'
+		/*:
+			Removes it from game matrix
+			Decrements horizontal position (y)
+			Check for collisions using 'put_in_matrix(false)'
+			If there are collisions
+				Increments horizontal position (y)
+				Puts it again on matrix
+				Returns 'false'
+			If there are not
+				Already put using 'put_in_matrix(false)'
+				Returns 'true'
+		 */
 
-		//Tirar da matriz do jogo (o contrXrio de 'put_in_matrix()')
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 			{
-				//Se x + i ou y + i  X negativo, ainda estX fora da matriz do jogo
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
-				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -206,31 +208,20 @@ namespace line_collapser
 				}//if
 			}//for
 
-		//Decrementar a posiXXo horizontal (y)
 		this->y--;
 
-		//Verificar se hX colisXes usando 'put_in_matrix(false)'
 		flag = this->put_in_matrix(false);
 
-		//Se houver
 		if (!flag)
 		{
-			//Incrementar a posiXXo horizontal (y)
 			this->y++;
 
-			//Recoloca na matriz
-			//(sem forXar. Tecnicamente, o espaXo foi completamente esvaziado,
-			//entXo mesmo sem forXar a funXXo deve ter sucesso, caso contrXrio hX um erro indeterminado [buffer overflow???])
 			if (!this->put_in_matrix(false)) return false;
 
-			//Retorna 'false'
 			return false;
 		}//if
-		//Se nXo houver
 		else
 		{
-			//JX colocou usando 'put_in_matrix(false)'
-			//Retorna 'true'
 			return true;
 		}//else
 
@@ -240,36 +231,35 @@ namespace line_collapser
 
 
 
-	//Move para a direita
-	//Devolve 'false' se nao pode se mover nesta direXXo
+	/* Moves right
+	 * returns 'false' if it can't move to that direction
+	 */
 	bool Tetramino::move_right()
 	{
-		//Se estiver resetado, nXo X possXvel mover (ele ainda nXo estX na matriz)
+		//If it is reseted, it isn't possible to move (it isn't on the matrix)
 		if (this->reseted) return false;
 
 		bool flag = true;
 		
-		//SequXncia:
-			//Tirar da matriz do jogo (se ainda nXo foi colocado)
-			//Incrementar a posiXXo horizontal (y)
-			//Verificar se hX colisXes usando 'put_in_matrix(false)'
-			//Se houver
-				//Decrementar a posiXXo vertical (y)
-				//Recolocar na matriz
-				//Retorna 'false'
-			//Se nXo houver
-				//JX colocou usando 'put_in_matrix(false)'
-				//Retorna 'true'
+		/*:
+			Removes it from game matrix
+			Increments horizontal position (y)
+			Check for collisions using 'put_in_matrix(false)'
+			If there are collisions
+				Decrements horizontal position (y)
+				Puts it again on matrix
+				Returns 'false'
+			If there are not
+				Already put using 'put_in_matrix(false)'
+				Returns 'true'
+		 */
 
-		//Tirar da matriz do jogo (o contrXrio de 'put_in_matrix()')
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 			{
-				//Se x + i ou y + i  X negativo, ainda estX fora da matriz do jogo
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
-				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -281,31 +271,20 @@ namespace line_collapser
 				}//if
 			}//for
 
-		//Incrementar a posiXXo horizontal (y)
 		this->y++;
 
-		//Verificar se hX colisXes usando 'put_in_matrix(false)'
 		flag = this->put_in_matrix(false);
 
-		//Se houver
 		if (!flag)
 		{
-			//Decrementar a posiXXo horizontal (y)
 			this->y--;
 
-			//Recolocar na matriz
-			//(sem forXar. Tecnicamente, o espaXo foi completamente esvaziado,
-			//entXo mesmo sem forXar a funXXo deve ter sucesso, caso contrXrio hX um erro indeterminado [buffer overflow???])
 			if (!this->put_in_matrix(false)) return false;
 
-			//Retorna 'false'
 			return false;
 		}//if
-		//Se nXo houver
 		else
 		{
-			//JX colocou usando 'put_in_matrix(false)'
-			//Retorna 'true'
 			return true;
 		}//else
 
@@ -315,49 +294,47 @@ namespace line_collapser
 
 
 
-	//Gira no sentido anti-horXrio
-	//Devolve 'false' se nao pode rotacionar
+	/* Rotate counter-clockwise
+	 * returns 'false' if it can't rotate
+	 */
 	bool Tetramino::rotate()
 	{
-		//Se estiver resetado, nXo X possXvel girar (ele ainda nXo estX na matriz)
+		//If it is reseted, it isn't possible to move (it isn't on the matrix)
 		if (this->reseted) return false;
 
-		//SequXncia:
-			/* Criar uma cXpia da matriz
-			 * Tirar da matriz do jogo (se ainda nXo foi colocado)
-			 * Se o Tetramino estiver no estado final
-			 *		Criar uma cXpia das coordenadas
-			 *		Dar um reset()
-			 *		Atualizar as coordenadas e o estado reseted
-			 * Se nXo estiver
-			 *		Rotacionar a matriz original
-			 * Verificar se hX colisXes usando 'put_in_matrix(false)'
-			 * Se houver:
-			 *		Copiar da matriz-cXpia para a original (desfazendo a rotaXXo)
-			 *		Recolocar na matriz
-			 *		Retornar 'false'
-			 * Se nXo houver:
-			 *		JX colocou usando 'put_in_matrix(false)'
-			 *		Atualizar o estado atual
-			 *		Retornar 'true'
+		/*
+			 * Makes a copy of game matrix
+			 * Removes from game matrix
+			 * If Tetramino is in it final state
+			 *		Makes a copy of coordinates
+			 *		Does a 'reset()'
+			 *		Updates coordinates and reseted state
+			 * If it isn't
+			 *		Rotate the original matrix
+			 * Check for collisions using 'put_in_matrix(false)'
+			 * If there are collisions:
+			 *		Copy from backup to matrix (undoing the rotation)
+			 *		Put it again on matrix
+			 *		Returns 'false'
+			 * If there aren't:
+			 *		Already put using 'put_in_matrix(false)'
+			 *		Updates the actual state (orientation)
+			 *		Returns 'true'
 			 */
 
 		unsigned short int backup[4][4];
 		int i;
 		int j;
 
-		//Fazendo backup e aproveitando o laXo para
-		//tirar da matriz do jogo que X o contrXrio de 'put_in_matrix()'
+		//Making the copy and removing from game matrix in the same loop
 		for (i = 0; i < 4; i++)
 			for (j = 0; j < 4; j++)
 			{
 				backup[i][j] = this->matrix[i][j];
 
-				//Se x + i ou y + i  X negativo, ainda estX fora da matriz do jogo
 				if (((this->x + i) < 0) || ((this->y + j) < 0))
 					continue;
-				//Se x + i ou y + i X maior do que o limite, tambXm estX fora da matriz
-				if (((this->x + i) >= MATRIX_HEIGHT) || ((this->y + j) >= MATRIX_WIDTH))
+				if (((this->x + i) >= LC_MATRIX_HEIGHT) || ((this->y + j) >= LC_MATRIX_WIDTH))
 					continue;
 
 				if (this->matrix[i][j] == 1)
@@ -369,30 +346,25 @@ namespace line_collapser
 				}//if
 			}//for
 
-		//Se o Tetramino estiver no estado final
 		if (this->state == this->max_states)
 		{
-			// Criar uma cXpia das coordenadas
 			i = this->x;
 			j = this->y;
 
-			// Dar um reset()
 			this->reset();
 
-			//Atualizar as coordenadas  e o estado reseted
 			this->x = i;
 			this->y = j;
 			this->reseted = false;
 		}//if
 		
-		//Se nXo estiver
 		else
 		{
-		/* Rotacionar a matriz original 
-		 * Fazemos com as formulas:
+		/* Rotate the original matrix
+		 * We do it with the following formulas:
 		 * x' = x * cos(theta) - y * sin(theta)
 		 * y' = x * sin(theta) + y * cos(theta)
-		 * Com theta = 90X (pi/2):
+		 * With theta = 90 degrees (pi/2):
 		 * x' = -y
 		 * y' = x
 		 */
@@ -403,40 +375,29 @@ namespace line_collapser
 			}//for
 		}//else
 
-		//Verificar se hX colisXes usando 'put_in_matrix(false)'
 		bool flag = this->put_in_matrix(false);
 		if (!flag)
-		//Se houver
 		{
-			//Copiar da matriz-cXpia para a original (desfazendo a rotaXXo)
 			for (i = 0; i < 4; i++)
 				for (j = 0; j < 4; j++)
 				{
 					this->matrix[i][j] = backup[i][j];
 				}//for
 
-			//Recolocar na matriz
-			//(sem forXar. Tecnicamente, o espaXo foi completamente esvaziado,
-			//entXo mesmo sem forXar a funXXo deve ter sucesso, caso contrXrio hX um erro indeterminado [buffer overflow???])
 			if (!this->put_in_matrix(false)) return false;
 
-			//Retornar 'false'
 			return false;
 		}//if
 
-		//Se nXo houver
 		else
 		{
-			//JX colocou usando 'put_in_matrix(false)'
-			//Atualizar o estado atual
-			//Se jX chegou ao limite, volta pro inicial
+			//If it got the limit, go back to the initial
 			if (this->state == this->max_states)
 				this->state = 1;
-			//Se ainda nXo chegou, incrementa
+			//If it didn't, increments
 			else
 				this->state = this->state + 1;
 
-			//Retornar 'true'
 			return true;
 		}
 	}//bool Tetramino::rotate()

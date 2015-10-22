@@ -1,56 +1,62 @@
-#ifndef _FALLING_TETRAMINO_H_
-#define _FALLING_TETRAMINO_H_
+#ifndef _LC_TETRAMINO_H_
+#define _LC_TETRAMINO_H_
 
 #include "includes.h"
 
 namespace line_collapser
 {
 	/* I know they're called Tetriminos, but it is not Tetris so I can call it the way I want to  =P
-	 * Esta classe nXo X instanciXvel, serve como base para
-	 * a criaXXo de Tetraminos individuais
+	 * This abstract class it's used as base
+	 * to the creation of each form of Tetraminos
 	 */
 
-class Tetramino
+class Tetramino //abstract
 {
 protected:
 	unsigned short int matrix[4][4];
-	BLOCK_COLOR cor;
-	int x, y; //posiXXo da matriz do Tetramino dentro da matriz principal do jogo
-	//MXximo de estados (orientaXXes) possXveis
+	lcBlockColor cor;
+	int x, y; //position of Tetramino matrix inside the game matrix
+	//Max of states (orientations) of the Tetramino
 	unsigned short int max_states;
-	//Estado atual
+	//Actult o state
 	unsigned short int state;
-	//Se estX no estado inicial
+	//If it is in construction state
 	bool reseted;
 
 public:
-	//Construtor
+	//Constructor
 	Tetramino();
 
-	//Coloca o tetramino na matiz do jogo
-	//devolve 'false' se tentar colocar em posiXXo jX ocupada
+	/* Puts Tetramino inside the game matrix
+	 * if 'force' is 'true', puts even if the position is occupied or out of the matrix
+	 * returns 'false' tried to put in an occupied position
+	 */
 	bool put_in_matrix(bool force);
 
-	//Move para baixo
-	//Devolve 'false' se nao pode se mover nesta direXXo
+	/* Moves down
+	 * returns 'false' if it can't move to that direction
+	 */
 	bool move_down();
 
-	//Move para a esquerda
-	//Devolve 'false' se nao pode se mover nesta direXXo
+	/* Moves left
+	 * returns 'false' if it can't move to that direction
+	 */
 	bool move_left();
 
-	//Move para a direita
-	//Devolve 'false' se nao pode se mover nesta direXXo
+	/* Moves right
+	 * returns 'false' if it can't move to that direction
+	 */
 	bool move_right();
 
-	//Gira no sentido anti-horXrio
-	//Devolve 'false' se nao pode rotacionar
+	/* Rotate counter-clockwise
+	 * returns 'false' if it can't rotate
+	 */
 	bool rotate();
 
-	//Desenha o tetramino na caixa NEXT
+	//Draws the Tetramino on the 'next' box
 	virtual void draw_in_next() = 0;
 
-	//Zera a matriz
+	//Empties the matrix
 	virtual void reset() = 0;
 
 };//class
