@@ -1,0 +1,4 @@
+# Generated files
+*.o
+*.d
+Line Collapser/linecollapser
