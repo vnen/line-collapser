@@ -224,7 +224,7 @@ void insert_next (int x, int y, lcBlockColor color)
 //Draws score
 void print_score (int scoreNum)
 {
-	SDL_Color cor = {0,0,0};	//Color RGB(0,0,0)
+	SDL_Color cor = {0,0,0,0};	//Color RGB(0,0,0)
 	char scoreChar[50];			//Score in 'char'
 
 	sprintf(scoreChar, "%d", scoreNum);	//Converts score to 'char'
@@ -246,7 +246,7 @@ void print_score (int scoreNum)
 //Draws the number of lines collapsed
 void print_line (int lineNum)
 {
-	SDL_Color cor = {0,0,0};			//Color RGB(0,0,0)
+	SDL_Color cor = {0,0,0,0};			//Color RGB(0,0,0)
 	char lineChar[50];					//Line in 'char'
 
 	sprintf(lineChar, "%d", lineNum);	//Converts line to 'char'
@@ -268,7 +268,7 @@ void print_line (int lineNum)
 //Draws the level
 void print_level (int levelNum)
 {
-	SDL_Color cor = {0,0,0};	//Color RGB(0,0,0)
+	SDL_Color cor = {0,0,0,0};	//Color RGB(0,0,0)
 	char levelChar[50];			//Level in 'char'
 
 	sprintf(levelChar, "%d", levelNum);	//Converts level to 'char'

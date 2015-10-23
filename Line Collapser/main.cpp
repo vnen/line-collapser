@@ -7,7 +7,7 @@
 #include <math.h>
 
 
-int main (int argc, char* args[])
+int main (void)
 {
 	//Standard namespace
 	using namespace line_collapser;

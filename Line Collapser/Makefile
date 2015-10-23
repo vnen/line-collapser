@@ -2,7 +2,7 @@ CPPFLAGS?=-O2
 LDFLAGS?=
 LIBS?=
 
-CPPFLAGS:=$(CPPFLAGS) -Wall -Wextra
+CPPFLAGS:=$(CPPFLAGS) -pedantic -Wall -Wextra -Werror
 LDFLAGS:=$(LDFLAGS) -g
 LIBS:=$(LIBS) -lSDL -lSDL_ttf -lSDL_image -lSDL_mixer -lm -lc
 
